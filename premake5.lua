@@ -1,13 +1,18 @@
 
 
-workspace "Xyla"
+workspace "Xyla" -- ie. solution in vs
     architecture "x64"
     configurations { "Debug", "Release" }
 
+
+
+    
+
 project "Xyla"
-    location "%{prj.name}"
+    location "%{wks.name}"
     kind "ConsoleApp"
     language "C++"
+    --staticruntime "on"
 
     targetdir "output/%{cfg.name}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
     objdir "intermidiaties/%{cfg.name}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
@@ -20,7 +25,21 @@ project "Xyla"
 
     includedirs
     {
+        "%{prj.name}/auxiliaries/SFML-2.5.1/include"
 
+    }
+
+    libdirs
+    {
+        "%{prj.name}/auxiliaries/SFML-2.5.1/lib"
+
+
+    }
+
+
+    links
+    {
+        
 
     }
 
@@ -30,9 +49,47 @@ project "Xyla"
         systemversion "latest"
 
     filter "configurations:Debug"
-        defines { "XYLA_DEBUG" }
+        defines 
+        { 
+            "XYLA_DEBUG",
+            "SFML_STATIC"
+        }
         symbols "On"
 
+        links
+        {
+            "winmm",
+            "opengl32",
+            "gdi32",
+            "sfml-system-s-d",
+            "sfml-window-s-d",
+            "freetype",
+            "sfml-graphics-s-d"
+
+        }
+
+
+       
+
+
+
     filter "configurations:Release"
-        defines { "XYLA_RELEASE" }
+        defines 
+        { 
+            "XYLA_RELEASE",
+            "SFML_STATIC" 
+    
+        }
         optimize "On"
+
+        links
+        {
+            "winmm",
+            "opengl32",
+            "gdi32",
+            "sfml-system-s",
+            "sfml-window-s",
+            "freetype",
+            "sfml-graphics-s"
+
+        }
