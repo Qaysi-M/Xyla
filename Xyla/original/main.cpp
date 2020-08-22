@@ -2,26 +2,49 @@
 
 #include <iostream>
 
-#include <SFML/Graphics.hpp>
+#include "game.h"
+#include "floor.h"
 
 int main() {
 
+    Game game;
 
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Title");
 
-    sf::Event event;
+	// Coming from the user
+    sf::VideoMode userMode = sf::VideoMode::getDesktopMode(); // get the userMode ie. 1920 X 1440 etc.
+    sf::RenderWindow windowView;
+  
 
-    while (window.isOpen()) {
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
 
-        }
+	windowView.create(userMode, "Xyla");
+	
+	game.createFloor();
+	Floor& floor = game.floors.back();
+	floor.createRoom(userMode);
 
-    }
 
-    std::cout << "Hello World!";
+	sf::Event event;
+
+	while (windowView.isOpen()) {
+		while (windowView.pollEvent(event)) { // True if an event was returned (ie. popped) , or false if the event queue was empty
+
+			if (event.type == sf::Event::Closed) {
+				windowView.close();
+
+			}
+		}
+
+
+		windowView.clear();
+
+		game.roomCT.drawRoom(windowView, floor.rooms.back());
+
+		
+
+		game.player.drawPlayer(windowView);
+
+		windowView.display();
+	}
 
     return 0;
 }
