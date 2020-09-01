@@ -56,7 +56,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>XYLA_DEBUG;SFML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>auxiliaries\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -73,7 +74,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>XYLA_RELEASE;SFML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>auxiliaries\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -92,26 +94,6 @@
       <AdditionalLibraryDirectories>auxiliaries\SFML-2.5.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="original\floor.cpp" />
-    <ClCompile Include="original\floorCT.cpp" />
-    <ClCompile Include="original\game.cpp" />
-    <ClCompile Include="original\main.cpp" />
-    <ClCompile Include="original\entity.cpp" />
-    <ClCompile Include="original\player.cpp" />
-    <ClCompile Include="original\room.cpp" />
-    <ClCompile Include="original\roomCT.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="original\floor.h" />
-    <ClInclude Include="original\floorCT.h" />
-    <ClInclude Include="original\game.h" />
-    <ClInclude Include="original\entity.h" />
-    <ClInclude Include="original\player.h" />
-    <ClInclude Include="original\room.h" />
-    <ClInclude Include="original\roomCT.h" />
-    <ClInclude Include="original\Xyla.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

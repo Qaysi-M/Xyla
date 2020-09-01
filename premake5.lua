@@ -17,6 +17,9 @@ project "Xyla"
     targetdir "output/%{cfg.name}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
     objdir "intermidiaties/%{cfg.name}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
 
+    pchheader "precompiled.h"
+    pchsource "%{prj.name}/original/precompiled.cpp"
+
     files 
     {
         "%{prj.name}/original/**.h",
