@@ -13,6 +13,7 @@ private:
 	sf::RectangleShape roomBorder;
 
 public:
-	void drawRoom(sf::RenderWindow& windowView, Room room);
-	void drawGold(sf::RenderWindow& windowView, Room room);
+	void drawRoom(sf::RenderWindow& windowView, Room& room);
+	void drawGold(sf::RenderWindow& windowView, Room& room);
+	void drawEnemy(sf::RenderWindow& windowView, Room& room);
 };

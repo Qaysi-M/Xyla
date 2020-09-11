@@ -4,6 +4,7 @@
 #include "playerCT.h"
 
 
+
 void PlayerCT::drawPlayer(sf::RenderWindow& windowView, Player& player) {
 	sf::Texture playerTexture;
 	playerTexture.loadFromFile("./src/textures/player.jpg");
@@ -26,31 +27,52 @@ void PlayerCT::drawGoldCount(sf::RenderWindow& windowView, Player& player) {
 	goldCount.setColor(sf::Color::Yellow);
 	goldCount.setFont(font);
 	goldCount.setCharacterSize(24);
-	std::string str= "Gold: " + std::to_string(player.gold);
+	std::string str= "Gold: " + std::to_string(player.golds.size());
 	goldCount.setString(str);
 	goldCount.setStyle(sf::Text::Bold | sf::Text::Underlined);
 
 	windowView.draw(goldCount);
 }
 
+void PlayerCT::drawHealthCount(sf::RenderWindow& windowView, Player& player) {
+	sf::Text healthCount;
+	sf::Font font;
+
+	font.loadFromFile("./src/fonts/jmh_typewriter/JMH Typewriter.ttf");
+	healthCount.setColor(sf::Color::Green);
+	healthCount.setFont(font);
+	healthCount.setCharacterSize(24);
+	healthCount.setPosition(0, 30);
+	std::string str = "health: " + std::to_string(player.health);
+	healthCount.setString(str);
+	healthCount.setStyle(sf::Text::Bold | sf::Text::Underlined);
+
+	windowView.draw(healthCount);
+}
 
 void PlayerCT::identifyKey(sf::Event& event, Room& room, Player& player) {
 	
 	switch (event.key.code) {
 		case sf::Keyboard::Left:
-			player.move(room, Player::Axis::x, Player::Direction::negative);
+			player.setDirection(room, Direction::left);
 			break;
 		case sf::Keyboard::Right:
-			player.move(room, Player::Axis::x, Player::Direction::positive);
+			player.setDirection(room, Direction::right);
 			break;
 		case sf::Keyboard::Up:
-			player.move(room, Player::Axis::y, Player::Direction::negative);
+			player.setDirection(room, Direction::up);
 			break;
 		case sf::Keyboard::Down:
-			player.move(room, Player::Axis::y, Player::Direction::positive);
+			player.setDirection(room, Direction::down);
 			break;
+
+		case sf::Keyboard::W:
+			player.setAction(room, Action::weildWeapon);
+			break;
+
 		default:
 			break;
+		
 	};
 
 

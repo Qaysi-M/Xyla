@@ -1,11 +1,9 @@
 
 
 #include "SFML/Graphics.hpp"
+#include "room.h"
 
-class Mathematics {
-
-
-public:
+namespace Xyla {
 	// Assume (w1,h1) are the width and hieght of a rectangle R1 ( ie. window)  [outer rectangle]
 	// Assume (w2,h2) are the width adn eheight of another rectangle R2 (room shape) [inner rectangle]
 	// The, getCenterPosition returns the point (x,y) such that (x,y)
@@ -16,16 +14,24 @@ public:
 
 	//	floor(a,b) is defined as x such that x is max({ y | y :=: b (mod b) and y <= a}).
 	// :=: denotes equivlance ie. 80 :=: 40 (mod 40) ;
-	// ie. floor( 50, 40) = 40 ; floor(90, 40)  = 80 etc.
-	sf::Vector2f floor(sf::Vector2f, int b, sf::Vector2f start = sf::Vector2f(0, 0));
+	// ie. floor( 50, 40) = 40 ; floor(90, 40)  = 8 ; floor(90,40, 10) = 80
+	sf::Vector2f floor(sf::Vector2f, int b, sf::Vector2f start = sf::Vector2f(0, 0), int indentation=0);
 
 
 	// given two intengers, rand(a,b) givesa psudo-random between a and b
 	float rand(int a, int b);
 
-	
 
 	
+	//Gives the position of a relative to b in an increment of u
+	//For example, if a=40 and b=30 and u =2, then getRelativePosition(a,b,u) = 5
+	sf::Vector2i getRelativePosition(sf::Vector2f& a, sf::Vector2f& b , float u = 50);
 
+	//This is oppoistie of getRelativePosition
+	sf::Vector2f getGeneralPosition(sf::Vector2i& a, sf::Vector2f& b, float u, float indentation = 0);
+
+
+	char print(sf::Vector2f v);
+	char print(sf::Vector2i v);
 
 };

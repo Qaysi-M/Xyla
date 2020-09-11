@@ -94,6 +94,36 @@
       <AdditionalLibraryDirectories>auxiliaries\SFML-2.5.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Xyla.h" />
+    <ClInclude Include="src\creature.h" />
+    <ClInclude Include="src\entity.h" />
+    <ClInclude Include="src\floor.h" />
+    <ClInclude Include="src\floorCT.h" />
+    <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\mathematics.h" />
+    <ClInclude Include="src\player.h" />
+    <ClInclude Include="src\playerCT.h" />
+    <ClInclude Include="src\precompiled.h" />
+    <ClInclude Include="src\room.h" />
+    <ClInclude Include="src\roomCT.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\creature.cpp" />
+    <ClCompile Include="src\entity.cpp" />
+    <ClCompile Include="src\floor.cpp" />
+    <ClCompile Include="src\floorCT.cpp" />
+    <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\mathematics.cpp" />
+    <ClCompile Include="src\player.cpp" />
+    <ClCompile Include="src\playerCT.cpp" />
+    <ClCompile Include="src\precompiled.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\room.cpp" />
+    <ClCompile Include="src\roomCT.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

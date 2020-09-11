@@ -30,6 +30,8 @@ public:
 	
 	void createFloor();
 
+	void moveEnemies();
+
 };
  
 

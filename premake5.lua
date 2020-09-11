@@ -9,7 +9,7 @@ workspace "Xyla" -- ie. solution in vs
     
 
 project "Xyla"
-    location "%{wks.name}"
+    location "%{wks.name}/"
     kind "ConsoleApp"
     language "C++"
     --staticruntime "on"
@@ -18,12 +18,12 @@ project "Xyla"
     objdir "intermidiaties/%{cfg.name}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
 
     pchheader "precompiled.h"
-    pchsource "%{prj.name}/original/precompiled.cpp"
+    pchsource "%{prj.name}/src/precompiled.cpp"
 
     files 
     {
-        "%{prj.name}/original/**.h",
-        "%{prj.name}/original/**.cpp"
+        "%{prj.name}/src/**.h",
+        "%{prj.name}/src/**.cpp"
     }
 
     includedirs
