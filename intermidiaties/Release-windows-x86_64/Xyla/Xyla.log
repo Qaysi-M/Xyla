@@ -1,0 +1,66 @@
+﻿  precompiled.cpp
+  creature.cpp
+  entity.cpp
+  floor.cpp
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(15,33): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(17,19): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(44,62): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(46,31): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(49,54): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(54,16): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(65,13): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(66,14): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(74,13): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(75,14): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(107,15): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(108,16): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(147,48): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(149,77): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(154,71): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  floorCT.cpp
+  game.cpp
+  main.cpp
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\main.cpp(26,12): warning C4244: 'initializing': conversion from 'time_t' to 'int', possible loss of data
+  mathematics.cpp
+  player.cpp
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\player.cpp(8,17): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  playerCT.cpp
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\playerCT.cpp(27,11): warning C4996: 'sf::Text::setColor': was declared deprecated
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\playerCT.cpp(42,13): warning C4996: 'sf::Text::setColor': was declared deprecated
+  room.cpp
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\room.cpp(41,38): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\room.cpp(42,40): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\room.cpp(77,17): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\room.cpp(78,8): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\room.cpp(82,21): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\room.cpp(94,21): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\room.cpp(95,8): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  roomCT.cpp
+  Generating Code...
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\room.cpp(127): warning C4715: 'Room::getNeighbor': not all control paths return a value
+floor.obj : error LNK2019: unresolved external symbol "public: void __cdecl Room::setPosition(class sf::Vector2<float>)" (?setPosition@Room@@QEAAXV?$Vector2@M@sf@@@Z) referenced in function "public: void __cdecl Floor::seperateRooms(class sf::VideoMode &)" (?seperateRooms@Floor@@QEAAXAEAVVideoMode@sf@@@Z)
+..\output\Release-windows-x86_64\Xyla\Xyla.exe : fatal error LNK1120: 1 unresolved externals

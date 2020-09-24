@@ -6,30 +6,37 @@
 
 #include "creature.h"
 
-void Room::setWidth(float width) {
-	Room::width = width;
-	Room::size.x = width;
-}
-void Room::setHeight(float height) {
-	Room::height = height;
-	Room::size.y = height;
-}
+
 void Room::setSize(sf::Vector2f size) {
 	Room::size = size;
 	Room::width = size.x;
 	Room::height = size.y;
+
+	Room::verteces[0] = Room::position;
+	Room::verteces[1] = sf::Vector2f(Room::position.x + Room::width, Room::position.y);
+	Room::verteces[2] = sf::Vector2f(Room::position.x, Room::position.y + Room::height);
+	Room::verteces[3] = sf::Vector2f(Room::position.x + Room::width, Room::position.y + Room::height);
+
+	Room::center = sf::Vector2f((Room::verteces[0].x + Room::verteces[1].x) / 2, (Room::verteces[0].y + Room::verteces[2].y) / 2);
 	
 }
 
-void Room::setPosition(sf::VideoMode& userMode) {
-	Room::position = Xyla::getCenterPosition(sf::Vector2f(1920, 1080), Room::size);
+void Room::setPosition(sf::Vector2f position) {
+	Room::position = position;
 
+	Room::verteces[0] = Room::position;
+	Room::verteces[1] = sf::Vector2f(Room::position.x + Room::width, Room::position.y);
+	Room::verteces[2] = sf::Vector2f(Room::position.x, Room::position.y + Room::height);
+	Room::verteces[3] = sf::Vector2f(Room::position.x + Room::width, Room::position.y + Room::height);
+
+	Room::center = sf::Vector2f((Room::verteces[0].x + Room::verteces[1].x) / 2, (Room::verteces[0].y + Room::verteces[2].y) / 2);
 }
 
-void Room::outlineVertices(sf::VideoMode& userMode) {
-	Room::setSize(Xyla::floor(sf::Vector2f(userMode.width * 0.50, userMode.height * 0.5), Room::unit));
+void Room::outlineVertices(sf::VideoMode& userMode, sf::Vector2f position, sf::Vector2f size) {
+	Room::setSize(size);
 	Room::setRoomMatrix();
-	Room::setPosition(userMode);
+	Room::setPosition(position);
+	
 
 	int height = Room::roomMatrix.size();
 	int width = Room::roomMatrix[0].size();

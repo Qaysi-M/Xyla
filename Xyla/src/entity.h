@@ -2,12 +2,9 @@
 #include "SFML\Graphics.hpp"
 
 class Entity { 
-	friend class Game;
-private:
-
 	
 public:
-	
+	int id;
 	
 	
 

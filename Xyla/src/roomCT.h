@@ -13,7 +13,12 @@ private:
 	sf::RectangleShape roomBorder;
 
 public:
-	void drawRoom(sf::RenderWindow& windowView, Room& room);
+	void drawLivingRoom(sf::RenderWindow& windowView, Room& room);
+#ifdef XYLA_DEBUG
+	void drawDungenRoom(sf::RenderWindow& windowView, Room& room);
+#endif // XYLA_DEBUG
+
+
 	void drawGold(sf::RenderWindow& windowView, Room& room);
 	void drawEnemy(sf::RenderWindow& windowView, Room& room);
 };

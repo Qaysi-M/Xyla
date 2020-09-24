@@ -11,7 +11,6 @@ namespace Xyla {
 	sf::Vector2f getCenterPosition(sf::Vector2f outer, sf::Vector2f inner);
 
 
-
 	//	floor(a,b) is defined as x such that x is max({ y | y :=: b (mod b) and y <= a}).
 	// :=: denotes equivlance ie. 80 :=: 40 (mod 40) ;
 	// ie. floor( 50, 40) = 40 ; floor(90, 40)  = 8 ; floor(90,40, 10) = 80
@@ -25,7 +24,7 @@ namespace Xyla {
 	
 	//Gives the position of a relative to b in an increment of u
 	//For example, if a=40 and b=30 and u =2, then getRelativePosition(a,b,u) = 5
-	sf::Vector2i getRelativePosition(sf::Vector2f& a, sf::Vector2f& b , float u = 50);
+	sf::Vector2i getRelativePosition(sf::Vector2f& a, sf::Vector2f& b , float u = 20);
 
 	//This is oppoistie of getRelativePosition
 	sf::Vector2f getGeneralPosition(sf::Vector2i& a, sf::Vector2f& b, float u, float indentation = 0);

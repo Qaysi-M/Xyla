@@ -37,9 +37,9 @@ class Creature {
 public:
 	const sf::Vector2f origin = sf::Vector2f(0, 0);
 	sf::Vector2f position = origin; 
-	sf::Vector2f size = sf::Vector2f(40, 40);
+	sf::Vector2f size = sf::Vector2f(20, 20);
 
-	float unit{ 40 };
+	float unit{20};
 	
 public:
 	// set position based of the room position and size

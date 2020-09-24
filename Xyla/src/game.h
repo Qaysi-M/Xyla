@@ -25,13 +25,9 @@ private:
 	
 
 public:
-	
 	Game();
 	
-	void createFloor();
-
-	void moveEnemies();
-
+	void createFloor(sf::VideoMode& userMode);
 };
  
 

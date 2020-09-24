@@ -26,8 +26,12 @@ sf::Vector2f Xyla::floor(sf::Vector2f size, int b, sf::Vector2f start, int inden
 
 
 float Xyla::rand(int a, int b) {
-	float x = (float) (std::rand() % (b - a) + 1 + a);
-	return x;
+	if (a < b) {
+		float x = (float)(std::rand() % (b - a) + 1 + a);
+		return x;
+	}
+	else 
+		return 0;
 }
 
 
