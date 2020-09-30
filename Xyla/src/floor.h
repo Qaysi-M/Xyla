@@ -17,7 +17,7 @@ class Floor : public Entity{
 
 	std::vector<int> livingRooms; // rooms that are visible
 	std::vector<int> dungenRooms; // Hallway rooms ie. rooms that are hallways to living rooms
-
+	float unit{ 30 };
 	std::vector<std::vector<std::list<int>>> floorMatrix;
 	
 	sf::CircleShape circle;
@@ -43,7 +43,7 @@ public:
 private:
 	
 
-	std::vector<std::array<int, 2>> edges; //edges to connect livingRooms; to set delauney tringulaiton and Minumem spanning tree.
+	//std::vector<std::array<int, 2>> edges; //edges to connect livingRooms; to set delauney tringulaiton and Minumem spanning tree.
 	
 	std::unordered_map<int, std::vector<int>> adjacencyList;
 
@@ -60,8 +60,30 @@ private:
 
 
 #ifdef XYLA_DEBUG
-	void printAL();  // print the adjacencylist
+
+	std::unordered_map<int, std::vector<int>> adjacencyListDT; // adjacency list for delaunay triangulations
+	std::unordered_map<int, std::vector<int>> adjacencyListMST; // adjacency list for minumem spaning tree;
+
+	std::vector<std::array<int, 2>> edgesDT;
+	std::vector<std::array<int, 2>> edgesMST;
+
+	void printAL(std::unordered_map<int, std::vector<int>>& AL);  // print the adjacencylist
+	void printEdges(std::vector<std::array<int, 2>>&);
 #endif // XYLA_DEBUG
+
+
+	// insert a into the adjacency of b
+	// insert b into the adjacency of a
+	void insert(int a, int b, std::unordered_map<int, std::vector<int>>& AL);
+	// delete a from the adjacency of b
+	// delete b from the adjacency of a
+	void deletee(int a, int b, std::unordered_map<int, std::vector<int>>& AL);
+
+	// it gets predecessor of b in the adjacency list of a
+	int pred(int a, int b, std::unordered_map<int, std::vector<int>>& AL);
+	// it gets successor  of b in the adjacency list of a
+	int succ(int a, int b, std::unordered_map<int, std::vector<int>>& AL);
+
 
 
 public:
@@ -73,23 +95,6 @@ public:
 	//returns 0 if k on the circle; return 1 if a is in circle; return 2 if a is out of the circle 
 	bool qtest(sf::Vector2f h, sf::Vector2f i, sf::Vector2f j, sf::Vector2f k);
 
-	// insert a into the adjacency of b
-	// insert b into the adjacency of a
-	void insert(int a, int b);
-	// delete a from the adjacency of b
-	// delete b from the adjacency of a
-	void deletee(int a, int b);
-	
-	// it gets predecessor of b in the adjacency list of a
-	int pred(int a, int b);
-	// it gets successor  of b in the adjacency list of a
-	int succ(int a, int b);
-
-
-
-
-
-
 	std::vector<int> mergeDTs(std::vector<int>& vl, std::vector<int>& vr); //DTs := two Delauney Triangulations 
 
 
@@ -97,8 +102,13 @@ public:
 
 public:
 	std::vector<int> constructDelauneyTrangulation(std::vector<int>& );
-
+	void constructEdges(std::unordered_map<int, std::vector<int>>& AL, std::vector<std::array<int, 2>>& edges); // constrct edges from adjacency list; edge (a, b , w) is underected edge from a to b with weight w
+	void constructMST(int start); //construct Minumem spaning tree
+	void addEdgesToMSTFromDT();
 	
+	void createHallways();
+	//given two interval (a1, b1) and (a2, b2), it return interval where those intervals intersect
+	std::vector<float> getIntersectingIntervals(float a1, float b1, float a2, float b2);
 };
 
 
@@ -106,24 +116,4 @@ public:
 
 
 
-
-
-
-
-
-
-
-
-
-/*
-	// implemtaion of circular doubly linked list
-	struct Node {
-		int value;
-		Node* pred;
-		Node* succ;
-	};
-
-	void push_back(Node*& list, int value); // insert at the end of list,; list is a pointer to start
-	void push_front(Node*&  list, int value); //insert at the begininng of the list
-	void insertAt(Node*& list, int value, int position); // insert the value at position in the list
-	*/
+	

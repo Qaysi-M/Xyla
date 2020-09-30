@@ -51,18 +51,16 @@ void FloorCT::numberRooms(sf::RenderWindow& windowView, Floor& floor) {
 #endif // XYLA_DEBUG
 
 
-void FloorCT::drawDT(sf::RenderWindow& windowView, Floor& floor) {
+void FloorCT::drawEdges(sf::RenderWindow& windowView,Floor& floor, std::unordered_map<int, std::vector<int>>& AL, sf::Color color) {
 	//std::array<sf::Vertex[2], 255> edges;
-	for (auto& v1 : floor.adjacencyList) {
+	for (auto& v1 : AL) {
 		for (int& v2 : v1.second) {
-
-			std::cout << "v1.first" << v1.first << std::endl;
-			std::cout << "v2" << v2 << std::endl;
 			sf::Vertex edge[] = { sf::Vertex(floor.rooms.at(v1.first).center), sf::Vertex(floor.rooms.at(v2).center) };
-			edge->color = sf::Color::Blue;
+			edge->color = color;
 			windowView.draw(edge, 2, sf::Lines);
 		}
 	}
 	
 
 }
+

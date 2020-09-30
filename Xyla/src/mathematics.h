@@ -24,13 +24,20 @@ namespace Xyla {
 	
 	//Gives the position of a relative to b in an increment of u
 	//For example, if a=40 and b=30 and u =2, then getRelativePosition(a,b,u) = 5
-	sf::Vector2i getRelativePosition(sf::Vector2f& a, sf::Vector2f& b , float u = 20);
+	sf::Vector2i getRelativePosition(sf::Vector2f& a, sf::Vector2f& b , float u = 30);
 
 	//This is oppoistie of getRelativePosition
 	sf::Vector2f getGeneralPosition(sf::Vector2i& a, sf::Vector2f& b, float u, float indentation = 0);
 
-
 	char print(sf::Vector2f v);
 	char print(sf::Vector2i v);
 
+	char print(std::vector<int>& v);
+
+
+
+	float getDistance(sf::Vector2f& a, sf::Vector2f& b);
+
+	//given two interval (a1, b1) and (a2, b2), it return interval where those intervals intersect provided that the two intervals intersect
+	std::vector<float> getIntersectingIntervals(float a1, float b1, float a2, float b2);
 };

@@ -59,3 +59,38 @@ char Xyla::print(sf::Vector2i v) {
 	std::cout << "(" << v.x << ", " << v.y << ")";
 	return NULL;
 }
+
+char Xyla::print(std::vector<int>& v) {
+	using namespace std;
+	cout << "( ";
+	for (auto& v : v)
+		cout << v << ", ";
+	cout << ")" << endl;
+
+	return NULL;
+}
+
+
+float Xyla::getDistance(sf::Vector2f& a, sf::Vector2f& b) {
+	float d = sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
+	return d;
+}
+
+
+std::vector<float> Xyla::getIntersectingIntervals(float a1, float b1, float a2, float b2) {
+	float a, b;
+
+	if (abs(b2 - a1) < abs(a2 - b1)) {
+		a = std::max(a1, a2);
+		b = std::min(std::min((abs(b2 - a1)), abs(b1 - a1)), abs( b2 -a2));
+	}
+	else {
+		a = std::max(a1, a2);
+		b = std::min(std::min((abs(b1 - a2)), abs(b1 - a1)), abs(b2 - a2));
+	}
+	
+	//std::vector<int> r = {(int) a, (int) (a + b)};
+	//std::cout << Xyla::print(r) << std::endl;
+	return std::vector<float> {a, a + b};
+
+}

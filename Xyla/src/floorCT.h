@@ -3,7 +3,7 @@
 #include "floor.h"
 #include "roomCT.h"
 
-class FloorCT{
+class FloorCT {
 	RoomCT roomCT;
 
 public:
@@ -17,7 +17,6 @@ public:
 	void numberRooms(sf::RenderWindow& windowView, Floor&);
 #endif // XYLA_DEBUG
 
-	void drawDT(sf::RenderWindow& windowView, Floor&); // DT := Delanuey Triangulations
-
+	void drawEdges(sf::RenderWindow& windowView, Floor&, std::unordered_map<int, std::vector<int>>& AL, sf::Color); // draw the edges ie( DT, or MST)
 
 };

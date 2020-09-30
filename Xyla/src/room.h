@@ -38,7 +38,7 @@ class Room: public Entity{
 
 public:
 
-	float unit{ 20 };
+	float unit{ 30 };
 	sf::Vector2f position = origin; // upleft
 	sf::Vector2f center = origin;
 

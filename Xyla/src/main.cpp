@@ -52,7 +52,8 @@ int main() {
 #ifdef XYLA_DEBUG
 		game.floorCT.drawCircle(windowView, floor);
 		game.floorCT.numberRooms(windowView, floor);
-		game.floorCT.drawDT(windowView, floor);
+		//game.floorCT.drawEdges(windowView, floor, floor.adjacencyListDT, sf::Color::Blue);
+		game.floorCT.drawEdges(windowView, floor, floor.adjacencyListMST, sf::Color::Red);
 #endif // XYLA_DEBUG
 		game.floorCT.drawDungen(windowView, floor);
 		//game.roomCT.drawRoom(windowView, floor.rooms.back());

@@ -53,7 +53,6 @@ class Gold : public Creature {
 	friend class Player;
 	friend class Room;
 
-
 };
 
 
@@ -62,7 +61,7 @@ class Enemy : public Creature {
 	friend class Room;
 	int health = 3;
 public:
-	sf::Vector2i nextMove(std::vector<std::vector<CreatureType>>& roomMatrix, sf::Vector2i start, sf::Vector2i end);
+	sf::Vector2i nextMove(std::vector<std::vector<CreatureType>>& roomMatrix, sf::Vector2i start, sf::Vector2i end); // uses breadth first search to move enemy
 	
 
 

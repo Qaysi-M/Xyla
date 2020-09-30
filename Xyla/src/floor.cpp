@@ -29,13 +29,13 @@ void Floor::createRoom(sf::VideoMode& userMode, sf::CircleShape circle) {
 	float r = circle.getRadius(), px = circle.getPosition().x, py = circle.getPosition().y;
 
 	while (x == 0 || y ==0) {
-		width = Xyla::rand(4, 12) * room.unit;
+		width = Xyla::rand(3, 10) * room.unit;
 		x = Xyla::rand((int)px, (int)(px + 2 *r - width));
 		float x2 = x + width;
 
 		float xoffset = x - px, xoffset2 = x2 - px;
 		
-		height = Xyla::rand(4, 12) * room.unit;
+		height = Xyla::rand(3, 10) * room.unit;
 		float halfChord = sqrt(pow(r, 2) - pow((r - xoffset), 2)), halfChord2 = sqrt(pow(r, 2) - pow((r - xoffset2), 2));
 		y = Xyla::rand(std::max((int) (py + (r - halfChord)),(int) (py + (r - halfChord2))),
 					   std::min((int) (py + r + halfChord - height), (int)(py + r + halfChord2 - height)));
@@ -53,7 +53,7 @@ void Floor::createRoom(sf::VideoMode& userMode, sf::CircleShape circle) {
 void Floor::createDungen(sf::VideoMode& userMode) {
 	//srand(time(0) + 20);
 	srand(20);
-	for (int i = 0; i < 70; i++) {
+	for (int i = 0; i < 20; i++) {
 		Floor::createRoom(userMode, Floor::circle);
 		
 	}
@@ -156,9 +156,6 @@ bool check = true;
 				else
 				{
 					Floor::rooms.erase(it++);
-					//room.id = -1;
-					//room.setSize(sf::Vector2f(0, 0));
-					//room.setPosition(sf::Vector2f(0, 0));
 				}
 					
 
@@ -176,7 +173,7 @@ void Floor::setLivingAndDungenRooms(sf::VideoMode& userMode) {
 	for (auto& room : Floor::rooms) {
 		float area = room.second.width * room.second.height;
 		
-		if (area >= 8 * room.second.unit * 8 * room.second.unit )
+		if (area >= 7 * room.second.unit * 6 * room.second.unit )
 			Floor::livingRooms.push_back(room.first);
 		else
 			Floor::dungenRooms.push_back(room.first);
@@ -277,11 +274,13 @@ std::vector<int> Floor::constructConvexHull(std::vector<int> v) {
 			p = q;
 		} while (p != 0);
 
+		/*
 		// Print Result 
 		std::cout << "Convex hull " << std::endl;
 		for (auto& vertex : convexHull)
 			std::cout << vertex << " , ";
 		std::cout << std::endl;
+		*/
 
 		return convexHull;
 
@@ -303,6 +302,7 @@ std::vector<int> Floor::constructDelauneyTrangulation(std::vector<int>& v) {
 			
 			for (int j = i + 1; (j % convexHull.size()) != i; ++j) {
 				Floor::adjacencyList.at(convexHull[i]).push_back(convexHull[j % convexHull.size()]);
+
 			}
 
 		}
@@ -323,31 +323,28 @@ std::vector<int> Floor::constructDelauneyTrangulation(std::vector<int>& v) {
 }
 
 
+
 std::vector<int> Floor::mergeDTs(std::vector<int>& vl, std::vector<int>& vr) {
 	std::vector<std::vector<int>> BTandUT = Floor::findBTandUT(vl, vr);
 	std::vector<int> BT = BTandUT[0], UT = BTandUT[1];
 	int l = BT[0], r = BT[1];
 	int r1, r2;
 	int l1, l2;
-	Floor::printAL();
 	while (BT != UT) {
 		
 		bool a = false, b = false;
-		Floor::insert(l, r);
-		Floor::printAL();
-		r1 = Floor::pred(r, l);
+		Floor::insert(l, r, Floor::adjacencyList);
+		r1 = Floor::pred(r, l, Floor::adjacencyList);
 		
 		// if r1 is left of line(l , r) ie if (l,r, r1) is counter clockwise
 		if (Floor::findOrientation(Floor::rooms.at(l).center, Floor::rooms.at(r).center, Floor::rooms.at(r1).center) == 1) { 
-			r2 = Floor::pred(r, r1);
+			r2 = Floor::pred(r, r1, Floor::adjacencyList);
 			// do until ( qtest)
 			while (Floor::qtest(Floor::rooms.at(l).center, Floor::rooms.at(r).center, Floor::rooms.at(r1).center, Floor::rooms.at(r2).center)) {
 				
-				Floor::deletee(r, r1);
-				Floor::printAL();
+				Floor::deletee(r, r1, Floor::adjacencyList);
 				r1 = r2;
-				std::cout << "(l, r, r1, r2) "<< l << ", " << r << ", " << r1 << ", "<< r2 << std::endl;
-				r2 = Floor::pred(r, r1);
+				r2 = Floor::pred(r, r1, Floor::adjacencyList);
 			} 
 		}
 		else 
@@ -355,17 +352,16 @@ std::vector<int> Floor::mergeDTs(std::vector<int>& vl, std::vector<int>& vr) {
 
 
 
-		l1 = Floor::succ(l, r);
+		l1 = Floor::succ(l, r, Floor::adjacencyList);
 		// if l1 is right of line(r, l) ie. if (r, l, l1) is clockwise
 		if (Floor::findOrientation(Floor::rooms.at(r).center, Floor::rooms.at(l).center, Floor::rooms.at(l1).center) == 2) {
-			l2 = Floor::succ(l, l1);
+			l2 = Floor::succ(l, l1, Floor::adjacencyList);
 
 			//notice that i flipped (r, l, l1) to (l1, l, r) to make it from clock wise to counter clockwise
 			while (Floor::qtest(Floor::rooms.at(l).center, Floor::rooms.at(r).center, Floor::rooms.at(l1).center, Floor::rooms.at(l2).center)) {
-				Floor::deletee(l, l1);
-				Floor::printAL();
+				Floor::deletee(l, l1, Floor::adjacencyList);
 				l1 = l2;
-				l2 = Floor::succ(l, l1);
+				l2 = Floor::succ(l, l1, Floor::adjacencyList);
 
 			} 
 		}
@@ -387,10 +383,9 @@ std::vector<int> Floor::mergeDTs(std::vector<int>& vl, std::vector<int>& vr) {
 		}
 
 		BT = std::vector<int>{ l, r };
-		std::cout << "BT is (" << BT[0] << ", " << BT[1] << " )" << std::endl;
-	} 
+	}
 	
-	Floor::insert(l, r);
+	Floor::insert(l, r, Floor::adjacencyList);
 
 	std::vector<int> v = vl;
 	v.insert(v.end(), vr.begin(), vr.end());
@@ -404,7 +399,6 @@ std::vector<std::vector<int>> Floor::findBTandUT(std::vector<int>& vl, std::vect
 	std::vector<int> BT;
 	std::vector<int> UT;
 	
-
 	int x = vl[vl.size() - 1], y = vr[0]; // x is most right of vl, y is most left of vr
 	int z = Floor::adjacencyList.at(y)[0]; // first(y) 
 	int z1 = Floor::adjacencyList.at(x)[0]; // first(x)
@@ -415,13 +409,13 @@ std::vector<std::vector<int>> Floor::findBTandUT(std::vector<int>& vl, std::vect
 		
 		if (Floor::findOrientation(Floor::rooms.at(x).center, Floor::rooms.at(y).center, Floor::rooms.at(z).center) == 2) {
 			int newZ = z;
-			z = Floor::succ(z, y);
+			z = Floor::succ(z, y, Floor::adjacencyList);
 			y = newZ;
 		}
 		else {
 			if (Floor::findOrientation(Floor::rooms.at(x).center, Floor::rooms.at(y).center, Floor::rooms.at(z2).center) == 2) {
 				int newZ2 = z2;
-				z2 = Floor::pred(z2, x);
+				z2 = Floor::pred(z2, x, Floor::adjacencyList);
 				x = newZ2;
 			}
 			else {
@@ -441,13 +435,13 @@ std::vector<std::vector<int>> Floor::findBTandUT(std::vector<int>& vl, std::vect
 		// if z is right of line(y,x) ie if x y z is clock wise
 		if (Floor::findOrientation(Floor::rooms.at(y).center, Floor::rooms.at(x).center, Floor::rooms.at(z).center) == 1) {
 			int newZ = z;
-			z = Floor::succ(z, y);
+			z = Floor::succ(z, y, Floor::adjacencyList);
 			y = newZ;
 		}
 		else {
 			if (Floor::findOrientation(Floor::rooms.at(y).center, Floor::rooms.at(x).center, Floor::rooms.at(z2).center) == 1) {
 				int newZ2 = z2;
-				z2 = pred(z2, x);
+				z2 = pred(z2, x, Floor::adjacencyList);
 				x = newZ2;
 			}
 			else {
@@ -459,8 +453,8 @@ std::vector<std::vector<int>> Floor::findBTandUT(std::vector<int>& vl, std::vect
 	}
 
 
-	std::cout << "BT is (" << BT[0] << ", " << BT[1] << " )" << std::endl;
-	std::cout << "UT is (" << UT[0] << ", " << UT[1] << " )" << std::endl;
+	//std::cout << "BT is (" << BT[0] << ", " << BT[1] << " )" << std::endl;
+	//std::cout << "UT is (" << UT[0] << ", " << UT[1] << " )" << std::endl;
 
 	return std::vector<std::vector<int>> {BT, UT};
 	
@@ -503,42 +497,42 @@ bool Floor::qtest(sf::Vector2f a, sf::Vector2f b, sf::Vector2f c, sf::Vector2f d
 
 
 
-void Floor::insert(int a, int b) {
-	//Floor::adjacencyList.at(b).push_back(a); //insert a into the adjacency list of b
-	//Floor::adjacencyList.at(a).insert(Floor::adjacencyList.at(a).begin(), b);  //insert b into the adjacency list of a
+void Floor::insert(int a, int b, std::unordered_map<int, std::vector<int>>& AL) {
+	//AL.at(b).push_back(a); //insert a into the adjacency list of b
+	//AL.at(a).insert(AL.at(a).begin(), b);  //insert b into the adjacency list of a
 	
-	for (int i = Floor::adjacencyList.at(a).size() - 1; i >= 0; --i) {
-		if (Floor::findOrientation(Floor::rooms.at(a).center, Floor::rooms.at(Floor::adjacencyList.at(a)[i]).center, Floor::rooms.at(b).center) == 1) {
-			Floor::adjacencyList.at(a).insert(Floor::adjacencyList.at(a).begin() + i + 1, b);
+	for (int i = AL.at(a).size() - 1; i >= 0; --i) {
+		if (Floor::findOrientation(Floor::rooms.at(a).center, Floor::rooms.at(AL.at(a)[i]).center, Floor::rooms.at(b).center) == 1) {
+			AL.at(a).insert(AL.at(a).begin() + i + 1, b);
 			break;
 		}
 		else if( i ==0)
-			Floor::adjacencyList.at(a).insert(Floor::adjacencyList.at(a).begin(), b);
+			AL.at(a).insert(AL.at(a).begin(), b);
 	}
-	int n = Floor::adjacencyList.at(b).size();
+	int n = AL.at(b).size();
 	for (int i = 0; i < n; ++i) {
-		//std::cout << Floor::adjacencyList.at(b).size() << " ";
-		if (Floor::findOrientation(Floor::rooms.at(b).center, Floor::rooms.at(Floor::adjacencyList.at(b)[i]).center, Floor::rooms.at(a).center) == 2) {
-			Floor::adjacencyList.at(b).insert(Floor::adjacencyList.at(b).begin() + i, a);
+		//std::cout << AL.at(b).size() << " ";
+		if (Floor::findOrientation(Floor::rooms.at(b).center, Floor::rooms.at(AL.at(b)[i]).center, Floor::rooms.at(a).center) == 2) {
+			AL.at(b).insert(AL.at(b).begin() + i, a);
 			break;
 		}
 		else if (i == n - 1)
-			Floor::adjacencyList.at(b).push_back(a);
+			AL.at(b).push_back(a);
 	}
 	
 }
 
 
-void Floor::deletee(int a, int b) {
-	for (int i = 0; i < Floor::adjacencyList.at(a).size(); ++i) {
-		if (Floor::adjacencyList.at(a)[i] == b) {
-			Floor::adjacencyList.at(a).erase(Floor::adjacencyList.at(a).begin() + i);
+void Floor::deletee(int a, int b, std::unordered_map<int, std::vector<int>>& AL) {
+	for (int i = 0; i < AL.at(a).size(); ++i) {
+		if (AL.at(a)[i] == b) {
+			AL.at(a).erase(AL.at(a).begin() + i);
 			break;
 		}
 	}
-	for (int i = 0; i < Floor::adjacencyList.at(b).size(); ++i) {
-		if (Floor::adjacencyList.at(b)[i] == a) {
-			Floor::adjacencyList.at(b).erase(Floor::adjacencyList.at(b).begin() + i);
+	for (int i = 0; i < AL.at(b).size(); ++i) {
+		if (AL.at(b)[i] == a) {
+			AL.at(b).erase(AL.at(b).begin() + i);
 			break;
 		}
 	}
@@ -546,11 +540,11 @@ void Floor::deletee(int a, int b) {
 }
 
 
-int Floor::pred(int a, int b) {
+int Floor::pred(int a, int b, std::unordered_map<int, std::vector<int>>& AL) {
 	int pred;
-	for (int i = 0; i < Floor::adjacencyList.at(a).size(); ++i) {
-		if (Floor::adjacencyList.at(a)[i] == b) {
-			pred = Floor::adjacencyList.at(a)[(i - 1 + Floor::adjacencyList.at(a).size()) % Floor::adjacencyList.at(a).size()];
+	for (int i = 0; i < AL.at(a).size(); ++i) {
+		if (AL.at(a)[i] == b) {
+			pred = AL.at(a)[(i - 1 + AL.at(a).size()) % AL.at(a).size()];
 			break;
 		}
 	}
@@ -559,11 +553,11 @@ int Floor::pred(int a, int b) {
 }
 
 
-int Floor::succ(int a, int b) {
+int Floor::succ(int a, int b, std::unordered_map<int, std::vector<int>>& AL) {
 	int succ;
-	for (int i = 0; i < Floor::adjacencyList.at(a).size(); ++i) {
-		if (Floor::adjacencyList.at(a)[i] == b) {
-			succ = (Floor::adjacencyList.at(a)[(i + 1) % Floor::adjacencyList.at(a).size()]); //z = SUCC(z, y)
+	for (int i = 0; i < AL.at(a).size(); ++i) {
+		if (AL.at(a)[i] == b) {
+			succ = (AL.at(a)[(i + 1) % AL.at(a).size()]); //z = SUCC(z, y)
 			break;
 		}
 	}
@@ -571,12 +565,132 @@ int Floor::succ(int a, int b) {
 	return succ;
 }
 
+
+
+
+void Floor::constructEdges(std::unordered_map<int, std::vector<int>>& AL, std::vector<std::array<int, 2>>& edges) {
+	for (auto& v1 : AL) {
+		for (auto& v2 : v1.second) {
+			std::array<int, 2> edge = {std::min(v1.first, v2), std::max(v1.first, v2)};
+			if (std::find(edges.begin(), edges.end(), edge) == edges.end())
+				edges.push_back(edge);
+		}
+	}
+}
+
+
+
+void Floor::constructMST(int start) {
+
+	struct Parent {
+		int vertex;
+		Parent* parent;
+		Parent(int vertex, Parent* parent) {
+			this->vertex = vertex;
+			this->parent = parent;
+		}
+	};
+
+	std::queue<Parent*> Q;
+	std::vector<int> visited;
+	std::vector<Parent*> parents;
+
+	visited.push_back(start);
+	Parent* p1 = new Parent(start, nullptr);
+	parents.push_back(p1);
+	Q.push(p1);
+
+
+	while (!Q.empty()) { // it terminates when all vertices are visited. 
+		Parent* q = Q.front();
+		std::vector<int> neighbors = Floor::adjacencyList.at(q->vertex);
+		Q.pop();
+		for (int& v : neighbors) {
+			if (std::find(visited.begin(), visited.end(), v) == visited.end()) { //check if v is not in visited
+				visited.push_back(v);
+				Parent* p = new Parent(v, q);
+				parents.push_back(p);
+				Q.push(p);
+			}
+		}
+		neighbors.clear();
+	}
+	
+
+
+	for (int& v : Floor::livingRooms) { // inilize adjacnencylistMST to be all living rooms;
+		Floor::adjacencyListMST[v];
+	}
+
+
+	
+	int v;
+	Parent* p;
+	for (int i = parents.size() - 1; i >= 1; --i) {
+		v = parents[i]->vertex;
+		p = parents[i]->parent;
+		Floor::adjacencyListMST.at(v).push_back(p->vertex);
+		Floor::adjacencyListMST.at(p->vertex).push_back(v);
+	}
+	
+
+	for (auto& p : parents) {
+		delete(p);
+	}
+	Floor::adjacencyList = Floor::adjacencyListMST; // update the GENERAL AL to be the ALMST;
+
+}
+
+void Floor::addEdgesToMSTFromDT() {
+	std::vector<std::array<int, 2>> edgesMSTComplement; // edgesMSTComplement = edgesDT - edgesMST
+	for (auto& e : Floor::edgesDT) {
+		if (std::find(Floor::edgesMST.begin(), Floor::edgesMST.end(), e) == Floor::edgesMST.end()) {
+			if (Floor::adjacencyListMST.at(e[0]).size() < 2 && Floor::adjacencyListMST.at(e[1]).size() < 2) {
+				edgesMSTComplement.push_back(e);
+			}
+		}
+	}
+
+	
+	srand(time(0));
+	for (auto& e : edgesMSTComplement) {
+		if (Xyla::rand(1, 100) <= 25) {
+			Floor::insert(e[0], e[1], Floor::adjacencyListMST);
+		}
+	}
+	Floor::constructEdges(Floor::adjacencyListMST, Floor::edgesMST);
+	Floor::adjacencyList = Floor::adjacencyListMST;
+
+
+}
+
+
+void Floor::createHallways() {
+	Floor::printEdges(Floor::edgesMST);
+
+	std::vector<float> rx;
+	std::vector<float> ry;
+
+	sf::Vector2f out; // door position to get out
+
+	for (auto& e : Floor::edgesMST) {
+		int v1 = e[0], v2 = e[1];
+		float a1x = Floor::rooms.at(v1).position.x, b1x = Floor::rooms.at(v1).position.x + Floor::rooms.at(v1).width;
+		float a2x = Floor::rooms.at(v2).position.x, b2x = Floor::rooms.at(v2).position.x + Floor::rooms.at(v2).width;
+		if ( a1x < b2x && a2x < b1x) { // if the two rooms intersect in x direct
+			rx = Xyla::getIntersectingIntervals(a1x, b1x, a2x, b2x);
+		}
+	}
+}
+
+
+
 #ifdef XYLA_DEBUG
 
-void Floor::printAL() {
+void Floor::printAL(std::unordered_map<int, std::vector<int>>& AL) {
 	using namespace std;
 	cout << "-------adjacency list---------" << endl;
-	for (auto& v1 : Floor::adjacencyList) {
+	for (auto& v1 : AL) {
 		cout << v1.first << " (";
 		for (int& v2 : v1.second) {
 			cout << v2 << ", ";
@@ -585,45 +699,16 @@ void Floor::printAL() {
 	}
 }
 
+
+void Floor::printEdges(std::vector<std::array<int, 2>>& edges) {
+	std::cout << " ---- Edges ----" << std::endl;
+	for (auto e : edges) {
+		std::cout << "( ";
+		for (auto& v : e)
+			std::cout << v << ", ";
+		std::cout << ")";
+	}
+	std::cout << std::endl;
+}
+
 #endif // XYLA_DEBUG
-
-/*
-void Floor::push_back(Node*& list, int value) {
-	Node* node = new Node;
-	node->value = value;
-
-	Node* last = list->pred;
-	node->succ = list;
-	node->pred = last;
-	last->succ = node;
-
-
-}
-
-void Floor::push_front(Node*& list, int value) {
-	Node* node = new Node;
-	node->value = value;
-
-	Node* last = list->pred;
-	last->succ = node;
-	node->pred = last;
-
-	node->succ = list;
-	list->pred = node;
-
-}
-void Floor::insertAt(Node*& list, int value, int position) {
-	Node* node = new Node;
-	node->value = value;
-	Node* it = list;
-	while (it->value != position)
-		it = it->succ;
-	Node* nextOfIt = it->succ;
-	it->succ = node;
-	node->pred = it;
-	node->succ = nextOfIt;
-	nextOfIt->pred = it;
-
-}
-
-*/
