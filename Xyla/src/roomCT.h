@@ -18,6 +18,8 @@ public:
 	void drawDungenRoom(sf::RenderWindow& windowView, Room& room);
 #endif // XYLA_DEBUG
 
+	void drawDoors(sf::RenderWindow& windowView, Room& room);
+
 
 	void drawGold(sf::RenderWindow& windowView, Room& room);
 	void drawEnemy(sf::RenderWindow& windowView, Room& room);

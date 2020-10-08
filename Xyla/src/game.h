@@ -14,9 +14,13 @@
 
 class Game {
 	friend int main();
+	friend class Player;
 private:
-	std::vector<Floor> floors;
+	std::unordered_map<int, Floor> floors;
+	int floorHighestId{ 0 };
 
+	int currentFloor;
+	int currentRoom;
 	Player player;
 
 	PlayerCT playerCT;
@@ -27,7 +31,14 @@ private:
 public:
 	Game();
 	
-	void createFloor(sf::VideoMode& userMode);
+	int createFloor(sf::VideoMode& userMode); // return the floorid
+
+	void setStartingRoom();
+	void initiatePlayer();
+	void startGame(sf::VideoMode& userMode);
+
+	void onTick();
+
 };
  
 

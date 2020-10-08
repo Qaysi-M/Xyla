@@ -2,6 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include "player.h"
 
+
 class PlayerCT{
 
 
@@ -11,7 +12,7 @@ public:
 	void drawGoldCount(sf::RenderWindow& windowView, Player& player);
 	void drawHealthCount(sf::RenderWindow& windowView, Player& player);
 
-	void identifyKey(sf::Event& event,Room& Room, Player& player);
+	void identifyKey(sf::Event& event,Game& game, Player& player);
 	
 
 

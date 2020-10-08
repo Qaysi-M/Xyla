@@ -1,2 +1,3 @@
-﻿  game.cpp
+﻿  main.cpp
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\main.cpp(26,12): warning C4244: 'initializing': conversion from 'time_t' to 'int', possible loss of data
   Xyla.vcxproj -> C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\..\output\Debug-windows-x86_64\Xyla\Xyla.exe

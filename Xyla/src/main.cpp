@@ -19,9 +19,7 @@ int main() {
 
 	windowView.create(userMode, "Xyla");
 	
-	game.createFloor(userMode);
-	Floor& floor = game.floors.back();
-	
+	game.startGame(userMode);
 	
 
 	//game.player.setPosition(floor.rooms.back());
@@ -29,43 +27,50 @@ int main() {
 	sf::Event event;
 	int i = 1;
 	while (windowView.isOpen()) {
-		//std::cout << "timer is " << time(0) << std::endl;
-		/*
-		if (time(0) > timer + i){
-			i++;
-			floor.rooms.back().moveEnemy(game.player);
-		}
-		*/
+		Floor& floor = game.floors.at(game.currentFloor);
+		Room& room = floor.rooms.at(game.currentRoom);
+
+		
 		while (windowView.pollEvent(event)) { // True if an event was polled (ie. recorded)
 
 			if (event.type == sf::Event::Closed) {
 				windowView.close();
 			}
 			if (event.type == sf::Event::KeyPressed) {
-				//game.playerCT.identifyKey(event, floor.rooms.back(), game.player);
+				game.playerCT.identifyKey(event, game,game.player);
 				
 			}
 			
 		}
 
+		if (time(0) > timer + i) {
+			i++;
+			game.onTick();
+		}
+	
 		windowView.clear();
 #ifdef XYLA_DEBUG
 		game.floorCT.drawCircle(windowView, floor);
 		game.floorCT.numberRooms(windowView, floor);
 		//game.floorCT.drawEdges(windowView, floor, floor.adjacencyListDT, sf::Color::Blue);
-		game.floorCT.drawEdges(windowView, floor, floor.adjacencyListMST, sf::Color::Red);
+		//game.floorCT.drawEdges(windowView, floor, floor.adjacencyListMST, sf::Color::Red);
 #endif // XYLA_DEBUG
 		game.floorCT.drawDungen(windowView, floor);
-		//game.roomCT.drawRoom(windowView, floor.rooms.back());
+		game.floorCT.drawDoors(windowView, floor);
 
-		//game.roomCT.drawGold(windowView, floor.rooms.back());
+		game.floorCT.drawEnemies(windowView, floor);
+		game.floorCT.drawGolds(windowView, floor);
+		//Room& room = floor.rooms.at(game.currentRoom);
+		//game.roomCT.drawRoom(windowView, room);
 
-		//game.roomCT.drawEnemy(windowView, floor.rooms.back());
+		//game.roomCT.drawGold(windowView, room);
 
-		//game.playerCT.drawPlayer(windowView, game.player);
+		//game.roomCT.drawEnemy(windowView, room);
 
-		//game.playerCT.drawGoldCount(windowView, game.player);
-		//game.playerCT.drawHealthCount(windowView, game.player);
+		game.playerCT.drawPlayer(windowView, game.player);
+
+		game.playerCT.drawGoldCount(windowView, game.player);
+		game.playerCT.drawHealthCount(windowView, game.player);
 
 		windowView.display();
 	}

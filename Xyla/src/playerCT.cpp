@@ -50,24 +50,24 @@ void PlayerCT::drawHealthCount(sf::RenderWindow& windowView, Player& player) {
 	windowView.draw(healthCount);
 }
 
-void PlayerCT::identifyKey(sf::Event& event, Room& room, Player& player) {
+void PlayerCT::identifyKey(sf::Event& event,Game& game, Player& player) {
 	
 	switch (event.key.code) {
 		case sf::Keyboard::Left:
-			player.setDirection(room, Direction::left);
+			player.setDirection(game, Direction::left);
 			break;
 		case sf::Keyboard::Right:
-			player.setDirection(room, Direction::right);
+			player.setDirection(game, Direction::right);
 			break;
 		case sf::Keyboard::Up:
-			player.setDirection(room, Direction::up);
+			player.setDirection(game, Direction::up);
 			break;
 		case sf::Keyboard::Down:
-			player.setDirection(room, Direction::down);
+			player.setDirection(game, Direction::down);
 			break;
 
 		case sf::Keyboard::W:
-			player.setAction(room, Action::weildWeapon);
+			player.setAction(game, Action::weildWeapon);
 			break;
 
 		default:

@@ -33,6 +33,12 @@ void FloorCT::drawDungen(sf::RenderWindow& windowView, Floor& floor) {
 
 }
 
+void FloorCT::drawDoors(sf::RenderWindow& windowView, Floor& floor) {
+	for (auto& room : floor.rooms) {
+		FloorCT::roomCT.drawDoors(windowView, room.second);
+	}
+}
+
 #ifdef XYLA_DEBUG
 void FloorCT::numberRooms(sf::RenderWindow& windowView, Floor& floor) {
 	sf::Text roomNumber;
@@ -64,3 +70,18 @@ void FloorCT::drawEdges(sf::RenderWindow& windowView,Floor& floor, std::unordere
 
 }
 
+
+
+void FloorCT::drawEnemies(sf::RenderWindow& windowView, Floor& floor) {
+	RoomCT roomCT;
+	for (auto& room : floor.rooms) {
+		roomCT.drawEnemy(windowView, room.second);
+	}
+}
+
+void FloorCT::drawGolds(sf::RenderWindow& windowView, Floor& floor) {
+	RoomCT roomCT;
+	for (auto& room : floor.rooms) {
+		roomCT.drawGold(windowView, room.second);
+	}
+}

@@ -23,7 +23,8 @@ enum class CreatureType {
 	Player = 1,
 	Wall = 2,
 	Gold = 3,
-	Enemy = 4
+	Enemy = 4,
+	Door = 5
 };
 
 
@@ -43,7 +44,7 @@ public:
 	
 public:
 	// set position based of the room position and size
-	void setPosition(sf::Vector2f& rPosotion, sf::Vector2f& rSize, float& rUnit);
+	void initiatePosition(sf::Vector2f& rPosotion, sf::Vector2f& rSize, float& rUnit);
 
 	std::vector<sf::Vector2i>& getNeighbors(std::vector<std::vector<CreatureType>>& roomMatrix, std::vector<sf::Vector2i>& neighbors, sf::Vector2i vertex);
 };

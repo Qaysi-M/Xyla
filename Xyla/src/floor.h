@@ -12,11 +12,15 @@
 class Floor : public Entity{
 	friend int main();
 	friend class Game;
+	friend class Player;
 	friend class FloorCT;
 	std::unordered_map<int, Room> rooms;
 
+
+	int heighestRoomId{ 1};
 	std::vector<int> livingRooms; // rooms that are visible
 	std::vector<int> dungenRooms; // Hallway rooms ie. rooms that are hallways to living rooms
+	std::vector<int> allRooms;  // union of livingRooms and dungenRooms
 	float unit{ 30 };
 	std::vector<std::vector<std::list<int>>> floorMatrix;
 	
@@ -32,7 +36,10 @@ public:
 	void removeRoomFromMatrix(sf::Vector2f position, float width, float height, int unit, int roomId); //set room area in floorMatrix
 
 
+private:	
 	void createRoom(sf::VideoMode& userMode, sf::CircleShape circle);
+
+public:
 	void createDungen(sf::VideoMode& userMode);
 	void seperateRooms(sf::VideoMode& userMode);
 	void setLivingAndDungenRooms(sf::VideoMode& userMode);
@@ -42,8 +49,6 @@ public:
 	
 private:
 	
-
-	//std::vector<std::array<int, 2>> edges; //edges to connect livingRooms; to set delauney tringulaiton and Minumem spanning tree.
 	
 	std::unordered_map<int, std::vector<int>> adjacencyList;
 
@@ -59,14 +64,14 @@ private:
 	std::vector<int> constructConvexHull(std::vector<int> v);
 
 
-#ifdef XYLA_DEBUG
+
 
 	std::unordered_map<int, std::vector<int>> adjacencyListDT; // adjacency list for delaunay triangulations
 	std::unordered_map<int, std::vector<int>> adjacencyListMST; // adjacency list for minumem spaning tree;
 
 	std::vector<std::array<int, 2>> edgesDT;
 	std::vector<std::array<int, 2>> edgesMST;
-
+#ifdef XYLA_DEBUG
 	void printAL(std::unordered_map<int, std::vector<int>>& AL);  // print the adjacencylist
 	void printEdges(std::vector<std::array<int, 2>>&);
 #endif // XYLA_DEBUG
@@ -101,14 +106,23 @@ public:
 
 
 public:
-	std::vector<int> constructDelauneyTrangulation(std::vector<int>& );
+	std::vector<int> constructDelauneyTrangulation(std::vector<int>& rooms);
 	void constructEdges(std::unordered_map<int, std::vector<int>>& AL, std::vector<std::array<int, 2>>& edges); // constrct edges from adjacency list; edge (a, b , w) is underected edge from a to b with weight w
-	void constructMST(int start); //construct Minumem spaning tree
+	void constructMST(int start, std::vector<int>& ); //construct Minumem spaning tree
 	void addEdgesToMSTFromDT();
 	
-	void createHallways();
+	// given two rooms, it creates a door between them;
+	void createConnectingDoor(sf::Vector2f position, Room& room1, Direction direction,  Room& room2, Direction direction2 );
+	void createHallway(sf::VideoMode& userMode,Room& room, sf::Vector2f position, float width, float height);
+	void createHallways(sf::VideoMode& userMode, std::vector<std::array<int, 2>>& edges);
 	//given two interval (a1, b1) and (a2, b2), it return interval where those intervals intersect
 	std::vector<float> getIntersectingIntervals(float a1, float b1, float a2, float b2);
+	
+	void createGolds();
+	void createEnemies();
+
+	void createDoors();
+
 };
 
 

@@ -5,13 +5,11 @@
 #include "mathematics.h"
 
 
-void Creature::setPosition(sf::Vector2f& rPosition, sf::Vector2f& rSize, float& rUnit) {
-
-	float px = Xyla::rand((int)(rPosition.x + rUnit), (int)(rPosition.x + rSize.x - rUnit));
-	float py = Xyla::rand((int)(rPosition.y + rUnit), (int)(rPosition.y + rSize.y - rUnit));
-
+void Creature::initiatePosition(sf::Vector2f& rPosition, sf::Vector2f& rSize, float& rUnit) {
+	float px = Xyla::rand((int)(rPosition.x + rUnit), (int)(rPosition.x + rSize.x - rUnit - 1));
+	float py = Xyla::rand((int)(rPosition.y + rUnit), (int)(rPosition.y + rSize.y - rUnit - 1));
 	Creature::position = Xyla::floor(sf::Vector2f(px, py), (int)rUnit, sf::Vector2f(rPosition.x, rPosition.y), 5);	
-
+	
 }
 
 
@@ -20,7 +18,7 @@ std::vector<sf::Vector2i>& Creature::getNeighbors(std::vector<std::vector<Creatu
 		if (roomMatrix[vertex.y][vertex.x - 1] == CreatureType::None || roomMatrix[vertex.y][vertex.x - 1] == CreatureType::Player)
 			neighbors.push_back(sf::Vector2i(vertex.x - 1, vertex.y));
 	}
-	if (vertex.x < sizeof(roomMatrix[0]) - 1) {
+	if (vertex.x < roomMatrix[0].size() - 1) {
 		if(roomMatrix[vertex.y][vertex.x + 1] == CreatureType::None || roomMatrix[vertex.y][vertex.x + 1] == CreatureType::Player)
 			neighbors.push_back(sf::Vector2i(vertex.x + 1, vertex.y));
 	}
@@ -28,7 +26,7 @@ std::vector<sf::Vector2i>& Creature::getNeighbors(std::vector<std::vector<Creatu
 		if (roomMatrix[vertex.y - 1][vertex.x] == CreatureType::None || roomMatrix[vertex.y - 1][vertex.x] == CreatureType::Player)
 			neighbors.push_back(sf::Vector2i(vertex.x, vertex.y - 1));
 	}
-	if (vertex.y < sizeof(roomMatrix) - 1) {
+	if (vertex.y < roomMatrix.size() - 1) {
 		if (roomMatrix[vertex.y + 1][vertex.x] == CreatureType::None || roomMatrix[vertex.y + 1][vertex.x] == CreatureType::Player)
 			neighbors.push_back(sf::Vector2i(vertex.x, vertex.y + 1));
 	}
@@ -56,7 +54,6 @@ sf::Vector2i Enemy::nextMove(std::vector<std::vector<CreatureType>>& roomMatrix,
 	Parent* p1 = new Parent(start, nullptr);
 	parents.push_back(p1);
 	Q.push(p1);
-	
 	
 	while (!Q.empty()){
 		Parent* q = Q.front();

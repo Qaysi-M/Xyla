@@ -12,6 +12,7 @@ public:
 #endif // XYLA_DEBUG
 	void drawDungen(sf::RenderWindow& windowView, Floor&);
 
+	void drawDoors(sf::RenderWindow& windowView, Floor&);
 
 #ifdef XYLA_DEBUG
 	void numberRooms(sf::RenderWindow& windowView, Floor&);
@@ -19,4 +20,6 @@ public:
 
 	void drawEdges(sf::RenderWindow& windowView, Floor&, std::unordered_map<int, std::vector<int>>& AL, sf::Color); // draw the edges ie( DT, or MST)
 
+	void drawEnemies(sf::RenderWindow& windowView, Floor&);
+	void drawGolds(sf::RenderWindow& windowView, Floor&);
 };

@@ -16,8 +16,9 @@ namespace Xyla {
 	// ie. floor( 50, 40) = 40 ; floor(90, 40)  = 8 ; floor(90,40, 10) = 80
 	sf::Vector2f floor(sf::Vector2f, int b, sf::Vector2f start = sf::Vector2f(0, 0), int indentation=0);
 
+	float floor(float a, int b, float start = 0, int indentation = 0);
 
-	// given two intengers, rand(a,b) givesa psudo-random between a and b
+	// given two intengers, rand(a,b) givesa psudo-random between a and b (includes a and b)
 	float rand(int a, int b);
 
 
@@ -40,4 +41,6 @@ namespace Xyla {
 
 	//given two interval (a1, b1) and (a2, b2), it return interval where those intervals intersect provided that the two intervals intersect
 	std::vector<float> getIntersectingIntervals(float a1, float b1, float a2, float b2);
+
+	
 };

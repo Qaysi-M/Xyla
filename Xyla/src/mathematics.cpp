@@ -24,10 +24,14 @@ sf::Vector2f Xyla::floor(sf::Vector2f size, int b, sf::Vector2f start, int inden
 
 }
 
+float Xyla::floor(float a, int b, float start, int indentation) {
+	return (float)((b * (((int)(a - start)) / b) + (int)start + indentation));
+
+}
 
 float Xyla::rand(int a, int b) {
-	if (a < b) {
-		float x = (float)(std::rand() % (b - a) + 1 + a);
+	if (a <= b) {
+		float x = (float)(std::rand() % (b - a + 1) + a);
 		return x;
 	}
 	else 
@@ -88,9 +92,7 @@ std::vector<float> Xyla::getIntersectingIntervals(float a1, float b1, float a2, 
 		a = std::max(a1, a2);
 		b = std::min(std::min((abs(b1 - a2)), abs(b1 - a1)), abs(b2 - a2));
 	}
-	
-	//std::vector<int> r = {(int) a, (int) (a + b)};
-	//std::cout << Xyla::print(r) << std::endl;
+
 	return std::vector<float> {a, a + b};
 
 }
