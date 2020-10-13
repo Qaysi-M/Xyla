@@ -13,6 +13,8 @@ public:
 	void drawHealthCount(sf::RenderWindow& windowView, Player& player);
 
 	void identifyKey(sf::Event& event,Game& game, Player& player);
+
+	void hitEnemy(sf::RenderWindow& windowView, Player& player);
 	
 
 

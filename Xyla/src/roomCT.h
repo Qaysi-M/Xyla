@@ -16,6 +16,7 @@ public:
 	void drawLivingRoom(sf::RenderWindow& windowView, Room& room);
 #ifdef XYLA_DEBUG
 	void drawDungenRoom(sf::RenderWindow& windowView, Room& room);
+	void drawHallwayRoom(sf::RenderWindow& windowView, Room& room);
 #endif // XYLA_DEBUG
 
 	void drawDoors(sf::RenderWindow& windowView, Room& room);
@@ -23,4 +24,6 @@ public:
 
 	void drawGold(sf::RenderWindow& windowView, Room& room);
 	void drawEnemy(sf::RenderWindow& windowView, Room& room);
+
+	void drawStair(sf::RenderWindow& windowView, Room& room);
 };

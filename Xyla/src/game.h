@@ -22,22 +22,25 @@ private:
 	int currentFloor;
 	int currentRoom;
 	Player player;
-
 	PlayerCT playerCT;
 	FloorCT floorCT;
 	RoomCT roomCT;
+
 	
 
 public:
 	Game();
 	
-	int createFloor(sf::VideoMode& userMode); // return the floorid
+	int createFloor(); // return the floorid
 
 	void setStartingRoom();
 	void initiatePlayer();
-	void startGame(sf::VideoMode& userMode);
+	void startGame();
+	void changeFloor();
 
 	void onTick();
+	void onWait();
+
 
 };
  

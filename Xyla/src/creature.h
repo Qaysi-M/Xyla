@@ -19,12 +19,15 @@ enum class Direction {
 
 enum class CreatureType {
 
-	None = 0,
-	Player = 1,
-	Wall = 2,
-	Gold = 3,
-	Enemy = 4,
-	Door = 5
+	Block = 0, // something player could not walk on
+	Sand = 1, // something player could walk on 
+	Grass = 2, 
+	Player = 2,
+	Wall = 3,
+	Gold = 4,
+	Enemy = 5,
+	Door = 6,
+	Stair = 7,
 };
 
 

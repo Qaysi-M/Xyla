@@ -7,7 +7,9 @@
 
 void PlayerCT::drawPlayer(sf::RenderWindow& windowView, Player& player) {
 	sf::Texture playerTexture;
-	playerTexture.loadFromFile("./src/textures/player.jpg");
+	playerTexture.loadFromFile("./textures/player.jpg");
+
+	
 
 	sf::Sprite sprite;
 	sprite.setPosition(player.position);
@@ -23,7 +25,7 @@ void PlayerCT::drawGoldCount(sf::RenderWindow& windowView, Player& player) {
 	sf::Text goldCount;
 	sf::Font font;
 	
-	font.loadFromFile("./src/fonts/jmh_typewriter/JMH Typewriter.ttf");
+	font.loadFromFile("./fonts/jmh_typewriter/JMH Typewriter.ttf");
 	goldCount.setColor(sf::Color::Yellow);
 	goldCount.setFont(font);
 	goldCount.setCharacterSize(24);
@@ -38,7 +40,7 @@ void PlayerCT::drawHealthCount(sf::RenderWindow& windowView, Player& player) {
 	sf::Text healthCount;
 	sf::Font font;
 
-	font.loadFromFile("./src/fonts/jmh_typewriter/JMH Typewriter.ttf");
+	font.loadFromFile("./fonts/jmh_typewriter/JMH Typewriter.ttf");
 	healthCount.setColor(sf::Color::Green);
 	healthCount.setFont(font);
 	healthCount.setCharacterSize(24);
@@ -76,4 +78,24 @@ void PlayerCT::identifyKey(sf::Event& event,Game& game, Player& player) {
 	};
 
 
+}
+
+
+void PlayerCT::hitEnemy(sf::RenderWindow& windowView, Player& player) {
+	if (player.didHit) {
+		sf::Text text;
+		sf::Font font;
+
+		font.loadFromFile("./fonts/jmh_typewriter/JMH Typewriter.ttf");
+		text.setColor(sf::Color::Green);
+		text.setFont(font);
+		text.setCharacterSize(24);
+		text.setPosition(300, 0);
+		std::string str = " You hit enemy";
+		text.setString(str);
+		text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+
+		windowView.draw(text);
+
+	}
 }

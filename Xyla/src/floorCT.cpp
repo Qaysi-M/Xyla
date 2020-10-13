@@ -29,13 +29,30 @@ void FloorCT::drawDungen(sf::RenderWindow& windowView, Floor& floor) {
 		//windowView.display();
 		//std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	}
+	/*
+	for (auto& roomid : floor.hallwayRooms) {
+		FloorCT::roomCT.drawHallwayRoom(windowView, floor.rooms.at(roomid));
+		//windowView.display();
+		//std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	}
+	*/
 #endif // XYLA_DEBUG
 
 }
 
+
+
+
+void FloorCT::drawRooms(sf::RenderWindow& windowView, Floor& floor) {
+
+	for (auto& roomid : floor.visitedRooms) {
+		FloorCT::roomCT.drawLivingRoom(windowView, floor.rooms.at(roomid));
+	}
+}
+
 void FloorCT::drawDoors(sf::RenderWindow& windowView, Floor& floor) {
-	for (auto& room : floor.rooms) {
-		FloorCT::roomCT.drawDoors(windowView, room.second);
+	for (auto& roomid : floor.visitedRooms) {
+		FloorCT::roomCT.drawDoors(windowView, floor.rooms.at(roomid));
 	}
 }
 
@@ -43,7 +60,7 @@ void FloorCT::drawDoors(sf::RenderWindow& windowView, Floor& floor) {
 void FloorCT::numberRooms(sf::RenderWindow& windowView, Floor& floor) {
 	sf::Text roomNumber;
 	sf::Font font;
-	font.loadFromFile("./src/fonts/jmh_typewriter/JMH Typewriter.ttf");
+	font.loadFromFile("./fonts/jmh_typewriter/JMH Typewriter.ttf");
 	roomNumber.setColor(sf::Color::Magenta);
 	roomNumber.setFont(font);
 	roomNumber.setCharacterSize(25);
@@ -73,15 +90,35 @@ void FloorCT::drawEdges(sf::RenderWindow& windowView,Floor& floor, std::unordere
 
 
 void FloorCT::drawEnemies(sf::RenderWindow& windowView, Floor& floor) {
-	RoomCT roomCT;
-	for (auto& room : floor.rooms) {
-		roomCT.drawEnemy(windowView, room.second);
+	for (auto& roomid : floor.visitedRooms) {
+		FloorCT::roomCT.drawEnemy(windowView, floor.rooms.at(roomid));
 	}
 }
 
 void FloorCT::drawGolds(sf::RenderWindow& windowView, Floor& floor) {
-	RoomCT roomCT;
-	for (auto& room : floor.rooms) {
-		roomCT.drawGold(windowView, room.second);
+	for (auto& roomid : floor.visitedRooms) {
+		FloorCT::roomCT.drawGold(windowView, floor.rooms.at(roomid));
+	}
+}
+
+
+void FloorCT::drawStair(sf::RenderWindow& windowView, Floor& floor) {
+	for (auto& roomid : floor.visitedRooms) {
+		FloorCT::roomCT.drawStair(windowView, floor.rooms.at(roomid));
+	}
+}
+
+
+void FloorCT::drawHallways(sf::RenderWindow& windowView, Floor& floor) {
+	for (auto& position : floor.visitedHallway) {
+		sf::Texture texture;
+		texture.loadFromFile("./textures/mesh.jpg");
+
+		sf::Sprite sprite;
+		sprite.setPosition(position);
+		sprite.setTexture(texture);
+
+		sf::FloatRect size = sprite.getLocalBounds();
+		windowView.draw(sprite);
 	}
 }

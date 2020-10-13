@@ -9,12 +9,14 @@ Game::Game() {
 
 }
 
-int Game::createFloor(sf::VideoMode& userMode) {
+int Game::createFloor() {
 	Floor floor;
-	floor.createDungen(userMode);
-	floor.seperateRooms(userMode);
-	floor.setLivingAndDungenRooms(userMode);
+	floor.createDungen();
+	floor.seperateRooms();
+	floor.setLivingAndDungenRooms();
+	floor.setGameMatrix();
 	floor.allRooms = floor.mergeSort(floor.allRooms);
+
 	
 
 	floor.constructDelauneyTrangulation(floor.allRooms);
@@ -25,14 +27,16 @@ int Game::createFloor(sf::VideoMode& userMode) {
 	floor.constructEdges(floor.adjacencyListMST, floor.edgesMST);
 
 	floor.addEdgesToMSTFromDT();
-	floor.createHallways(userMode, floor.edgesMST);
-
+	floor.createHallways(floor.edgesMST);
+	floor.createStair();
 	floor.createGolds();
 	floor.createEnemies();
-	floor.createDoors();
-	int id = Game::floorHighestId++;
-
+	//floor.createDoors();
+	int id = Game::floorHighestId;
+	Game::floorHighestId++;
+	
 	Game::floors.insert({id, floor});
+	
 
 	return id;
 }
@@ -41,25 +45,41 @@ void Game::setStartingRoom() {
 	srand(time(0));
 	int i = Xyla::rand(0, Game::floors.at(currentFloor).livingRooms.size() - 1); // choose a rand room
 	Game::currentRoom = Game::floors.at(currentFloor).livingRooms[i];
+	Game::floors.at(currentFloor).visitedRooms.push_back(Game::currentRoom);
 }
 
 void Game::initiatePlayer() {
 	Floor& floor = Game::floors.at(Game::currentFloor);
 	Room& room = floor.rooms.at(currentRoom);
 	Game::player.initiatePosition(room.position, room.size, room.unit);
-	Game::player.setPosition(room);
+	Game::player.setPosition(floor, room);
+
+	floor.printMatrix();
 }
 
-void Game::startGame(sf::VideoMode& userMode) {
-	Game::currentFloor = Game::createFloor(userMode); //create a floor
-
+void Game::startGame() {
+	Game::currentFloor = Game::createFloor(); //create a floor
 	Game::setStartingRoom();
 	Game::initiatePlayer();
 
 
 }
 
-void Game::onTick() {
-	Room& room = Game::floors.at(Game::currentFloor).rooms.at(currentRoom);
-	room.moveEnemy(Game::player);
+
+void Game::changeFloor() {
+	Game::currentFloor = Game::createFloor(); //create a floor
+	Game::setStartingRoom();
+	Game::initiatePlayer();
 }
+
+void Game::onTick() {
+	Floor& floor = Game::floors.at(Game::currentFloor);
+	Room& room = Game::floors.at(Game::currentFloor).rooms.at(currentRoom);
+	floor.moveEnemy(Game::player, room);
+}
+
+void Game::onWait() {
+	Game::player.didHit = false;
+
+}
+

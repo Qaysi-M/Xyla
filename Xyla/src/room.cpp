@@ -3,7 +3,7 @@
 
 #include "mathematics.h"
 #include "room.h"
-
+#include "floor.h"
 #include "creature.h"
 
 
@@ -32,7 +32,7 @@ void Room::setPosition(sf::Vector2f position) {
 	Room::center = sf::Vector2f((Room::verteces[0].x + Room::verteces[1].x) / 2, (Room::verteces[0].y + Room::verteces[2].y) / 2);
 }
 
-void Room::outlineVertices(sf::VideoMode& userMode, sf::Vector2f position, sf::Vector2f size) {
+void Room::outlineVertices(sf::Vector2f position, sf::Vector2f size) {
 	Room::setSize(size);
 	Room::setPosition(position);
 	Room::setRoomMatrix();
@@ -62,7 +62,7 @@ void Room::setRoomMatrix() {
 
 	for (int i = 0; i < (int)((Room::height) / Room::unit); ++i) {
 		for (int j = 0; j < (int)((Room::width) / Room::unit); ++j) {
-			Room::roomMatrix[i][j] = CreatureType::None;
+			Room::roomMatrix[i][j] = CreatureType::Sand;
 		}
 	}
 
@@ -78,52 +78,18 @@ bool Room::isInhabitable(){
 }
 
 
-void Room::createGold() {
-	if (Room::isInhabitable()) {
-		std::srand(time(0) + (int)CreatureType::Gold);
-		int b = (((int)Room::width) / Room::unit + ((int)Room::height) / Room::unit) / 10;
-		int goldNumber = (int)Xyla::rand(0, b);
 
-		std::srand(time(0) + 11);
-		for (int i = 0; i <= goldNumber; ++i) {
-			Gold gold;
-			gold.initiatePosition(Room::position, Room::size, Room::unit);
-			sf::Vector2i goldPosition = Xyla::getRelativePosition(gold.position, Room::position, Room::unit);
-			Room::golds.push_back(gold);
-			Room::roomMatrix[goldPosition.y][goldPosition.x] = CreatureType::Gold;
-		}
-	}
+
+void Room::createStair() {
+	float px = Xyla::rand((int)(Room::position.x + Room::unit), (int)(Room::position.x + Room::size.x - Room::unit - 1));
+	float py = Xyla::rand((int)(Room::position.y + Room::unit), (int)(Room::position.y + Room::size.y - Room::unit - 1));
+
+	stair.position = Xyla::floor(sf::Vector2f(px, py), (int)Room::unit, sf::Vector2f(Room::position.x, Room::position.y), 5);
+
+	sf::Vector2i stairRePosition = Xyla::getRelativePosition(stair.position, Room::position, Room::unit);
+	Room::roomMatrix[stairRePosition.y][stairRePosition.x] = CreatureType::Stair;
 }
 
-void Room::createEnemies() {
-	if (Room::isInhabitable()) {
-		std::srand(time(0) + (int)CreatureType::Enemy);
-		int b = (((int)Room::width) / Room::unit + ((int)Room::height) / Room::unit) / 15;
-		int enemyNumber = (int)Xyla::rand(0, b);
-		for (int i = 0; i <= enemyNumber; ++i) {
-			Enemy enemy;
-			enemy.initiatePosition(Room::position, Room::size, Room::unit);
-			sf::Vector2i enemyPosition = Xyla::getRelativePosition(enemy.position, Room::position, Room::unit);
-
-			if (Room::roomMatrix[enemyPosition.y][enemyPosition.x] == CreatureType::None) {
-				Room::enemies.push_back(enemy);
-				Room::roomMatrix[enemyPosition.y][enemyPosition.x] = CreatureType::Enemy;
-			}
-			else {
-				//--i;
-			}
-		}
-	}
-}
-
-
-
-void Room::createDoors() {
-	for (auto& door : Room::doors) {
-		sf::Vector2i doorRePosition = Xyla::getRelativePosition(door.position, Room::position, Room::unit);
-		Room::roomMatrix[doorRePosition.y][doorRePosition.x] = CreatureType::Door;
-	}
-}
 
 sf::Vector2i Room::getNeighbor(sf::Vector2i cRePosition, Direction direction) {
 	switch (direction){
@@ -137,32 +103,4 @@ sf::Vector2i Room::getNeighbor(sf::Vector2i cRePosition, Direction direction) {
 			return sf::Vector2i(cRePosition.x + 1, cRePosition.y);
 			break;
 	}
-
-
-
-}
-
-
-void Room::moveEnemy(Player& player) {
-		for (std::list<Enemy>::iterator it = Room::enemies.begin(); it != Room::enemies.end(); ++it) {
-			std::cout << "enemy rp = " << Xyla::print(Xyla::getRelativePosition(it->position, Room::position, Room::unit)) << std::endl;
-			std::cout << "player rp = " << Xyla::print(Xyla::getRelativePosition(player.position, Room::position, Room::unit)) << std::endl;
-			sf::Vector2i nextMove = it->nextMove(Room::roomMatrix, Xyla::getRelativePosition(it->position, Room::position, Room::unit),
-				Xyla::getRelativePosition(player.position, Room::position, Room::unit));
-			//std::cout << "next move = " << Xyla::print(nextMove) << std::endl;
-			if (roomMatrix[nextMove.y][nextMove.x] != CreatureType::Player ) {
-				if (roomMatrix[nextMove.y][nextMove.x] == CreatureType::None){
-					sf::Vector2i rePosition = Xyla::getRelativePosition(it->position, Room::position, Room::unit);
-					roomMatrix[rePosition.y][rePosition.x] = CreatureType::None;
-					it->position = Xyla::getGeneralPosition(nextMove, Room::position, Room::unit, 5);
-					roomMatrix[nextMove.y][nextMove.x] = CreatureType::Enemy;
-				}
-			}
-			else {
-				if (--player.health == 0)
-					break;
-			}
-
-		}
-
 }

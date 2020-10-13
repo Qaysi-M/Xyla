@@ -10,10 +10,15 @@
 	
 
 struct Door { // the room that the door opens to
-	sf::Vector2f position;
-	int neighborRoom;
-	Direction neighborDirection;
+	sf::Vector2f position; // door is square of 1 unit * 1 unit. Poisiton is left upper position of the square
+	int roomid;
 };
+
+struct Stair {
+	sf::Vector2f position;
+};
+
+class Floor;
 class Room: public Entity{
 	friend int main();
 	friend class RoomCT;
@@ -42,6 +47,7 @@ public:
 	
 
 	std::vector<Door> doors;
+	Stair stair;
 	float unit{ 30 };
 	sf::Vector2f position = origin; // upleft
 	sf::Vector2f size{ sf::Vector2f(0,0) }; // size is a sf::vector2f(w,h) such that w & h is the width & of the room respectively.
@@ -53,14 +59,13 @@ public:
 public:
 	void setSize(sf::Vector2f);
 	void setPosition(sf::Vector2f position);
-	void outlineVertices(sf::VideoMode& userMode, sf::Vector2f position, sf::Vector2f size);
+	void outlineVertices(sf::Vector2f position, sf::Vector2f size);
 	void setRoomMatrix();
 	
 private:	bool isInhabitable(); // checks if the room has space for a creature to live there,
 public:
-	void createGold();
-	void createEnemies();
-	void createDoors();
+	
+	void createStair();
 
 	void moveEnemy(Player& player); 
 

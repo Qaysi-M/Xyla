@@ -11,16 +11,16 @@ Floor::Floor() {
 	Floor::circle.setRadius(350);
 	Floor::circle.setPosition(Xyla::getCenterPosition(sf::Vector2f(1920,1080), sf::Vector2f(700,700))); // a circle psoistion is upperright of 
 																										// a square tangent to circle from outside
-	Room r;
-	Floor::floorMatrix.resize(1080 / r.unit);
+	
+	Floor::floorMatrix.resize(1080 / Floor::unit);
 	for (auto& row : Floor::floorMatrix) {
-		row.resize(1920 / r.unit);
+		row.resize(1920 / Floor::unit);
 	}
 
-
+	
 }
 
-void Floor::createRoom(sf::VideoMode& userMode, sf::CircleShape circle) {
+void Floor::createRoom(sf::CircleShape circle) {
 
 	Room room;
 	float width, height;
@@ -42,7 +42,7 @@ void Floor::createRoom(sf::VideoMode& userMode, sf::CircleShape circle) {
 	}
 	sf::Vector2f position = Xyla::floor(sf::Vector2f(x, y), Floor::unit);
 	room.setRoomMatrix();
-	room.outlineVertices(userMode, position, sf::Vector2f(width, height)); 
+	room.outlineVertices(position, sf::Vector2f(width, height)); 
 	room.id = Floor::heighestRoomId++;
 	Floor::rooms.insert({ room.id, room});
 
@@ -50,15 +50,15 @@ void Floor::createRoom(sf::VideoMode& userMode, sf::CircleShape circle) {
 
 }
 
-void Floor::createDungen(sf::VideoMode& userMode) {
-	//srand(time(0) + 20);
-	srand(20);
+void Floor::createDungen() {
+	srand(time(0) + 20);
+	//srand(20);
 	for (int i = 0; i < 30; i++) {
-		Floor::createRoom(userMode, Floor::circle);
+		Floor::createRoom(Floor::circle);
 		
 	}
 	
-	Floor::printMatrix();
+	
 }
 
 
@@ -68,6 +68,11 @@ void Floor::addRoomtoMatrix(sf::Vector2f position, float width, float height, in
 			Floor::floorMatrix[i][j].push_back(roomId);
 		}
 	}
+
+	
+	
+
+
 }
 
 void Floor::removeRoomFromMatrix(sf::Vector2f position, float width, float height, int unit, int roomId) {
@@ -78,24 +83,22 @@ void Floor::removeRoomFromMatrix(sf::Vector2f position, float width, float heigh
 			
 		}
 	}
+	
 }
 
 
 void Floor::printMatrix() {
-	/*
-	for (int i = 0; i < Floor::floorMatrix.size(); ++i) {
-		for (int j = 0; j < Floor::floorMatrix[0].size(); ++j) {
-			if(Floor::floorMatrix[i][j].empty())
-				std::cout << 0 << " ";
-			else
-				std::cout << Floor::floorMatrix[i][j].back() << " ";
+	
+	for (int i = 0; i < Floor::gameMatrix.size(); ++i) {
+		for (int j = 0; j < Floor::gameMatrix[0].size(); ++j) {
+			std::cout << (int) Floor::gameMatrix[i][j] << " ";
 		}
 		std::cout << std::endl;
 	}
-	*/
+
 }
 
-void Floor::seperateRooms(sf::VideoMode& userMode) {
+void Floor::seperateRooms() {
 	int count = 0;
 bool check = true;
 	while (check) {
@@ -169,7 +172,7 @@ bool check = true;
 	
 }
 
-void Floor::setLivingAndDungenRooms(sf::VideoMode& userMode) {
+void Floor::setLivingAndDungenRooms() {
 	for (auto& room : Floor::rooms) {
 		float area = room.second.width * room.second.height;
 		
@@ -184,6 +187,41 @@ void Floor::setLivingAndDungenRooms(sf::VideoMode& userMode) {
 
 
 }
+
+
+void Floor::setGameMatrix() {
+	Floor::gameMatrix.resize(1080 / Floor::unit);
+	for (auto& row : Floor::gameMatrix) {
+		row.resize(1920 / Floor::unit);
+	}
+
+	for (auto& room : Floor::rooms) {
+		auto& position = room.second.position; auto& height = room.second.height; auto& width = room.second.width;
+
+		for (int i = position.y / unit; i < (int)((position.y + height) / unit); i++) {
+			for (int j = position.x / unit; j < (int)((position.x + width) / unit); j++) {
+				Floor::gameMatrix[i][j] = CreatureType::Sand;
+			}
+		}
+
+		for (int i = position.y / unit; i < (int)((position.y + height) / unit); i++) {
+			Floor::gameMatrix[i][position.x / Floor::unit] = CreatureType::Wall;
+			Floor::gameMatrix[i][(position.x + width) / Floor::unit - 1] = CreatureType::Wall;
+		}
+		for (int j = position.x / unit; j < (int)((position.x + width) / unit); j++) {
+			Floor::gameMatrix[position.y / Floor::unit][j] = CreatureType::Wall;
+			Floor::gameMatrix[(position.y + height) / Floor::unit - 1][j] = CreatureType::Wall;
+		}
+
+	}
+}
+
+
+
+
+
+
+
 
 
 std::vector<int> Floor::mergeSort(std::vector<int>& v) {
@@ -653,7 +691,6 @@ void Floor::addEdgesToMSTFromDT() {
 		}
 	}
 
-	
 	srand(time(0));
 	for (auto& e : edgesMSTComplement) {
 		if (Xyla::rand(1, 100) <= 15) {
@@ -663,274 +700,193 @@ void Floor::addEdgesToMSTFromDT() {
 	Floor::constructEdges(Floor::adjacencyListMST, Floor::edgesMST);
 	Floor::adjacencyList = Floor::adjacencyListMST;
 
-
 }
 
 void Floor::createConnectingDoor(sf::Vector2f position, Room& room1, Direction direction, Room& room2, Direction direction2) {
-	Door door1;
-	door1.position = position;
-	door1.neighborRoom = room2.id;
-	door1.neighborDirection = direction2; // it opens to room 2 
-	room1.doors.push_back(door1);
-
-	Door door2;
-	door2.position = position;
-	door2.neighborRoom = room1.id;
-	door2.neighborDirection = direction;
-	room2.doors.push_back(door2);
-}
-
-
-void Floor::createHallway(sf::VideoMode& userMode, Room& room, sf::Vector2f position, float width, float height) {
-
-	room.outlineVertices(userMode, position, sf::Vector2f(width, height));
-
-	Floor::rooms.insert({ room.id, room });
-	Floor::addRoomtoMatrix(position, width, height, Floor::unit, room.id);
-	Floor::dungenRooms.push_back(room.id);
-	Floor::allRooms.push_back(room.id);
-
-}
-
-void Floor::createHallways(sf::VideoMode& userMode, std::vector<std::array<int, 2>>& edges) {
 	
+}
 
-	std::vector<float> rx, ry;
+void Floor::createDoor(Room& room) {
+	bool isCreated = false;
 	float x, y;
-	float width, height;
+	//create a door on an edge of room
+	while (!isCreated) {
+		switch ((int)Xyla::rand(1, 4)) {
+		case 1: // left edge
+			x = room.position.x;
+			y = Xyla::rand(room.position.y + Floor::unit, room.position.y + room.height - 2 * Floor::unit);
+			break;
+		case 2: // right edge
+			x = room.position.x + room.width - Floor::unit;
+			y = Xyla::rand(room.position.y + Floor::unit, room.position.y + room.height - 2 * Floor::unit);
+			break;
+		case 3: // upper edge
+			x = Xyla::rand(room.position.x + Floor::unit, room.position.x + room.width - 2 * Floor::unit);
+			y = room.position.y;
+			break;
+		case 4: // upper edge
+			x = Xyla::rand(room.position.x + Floor::unit, room.position.x + room.width - 2 * Floor::unit);
+			y = room.position.y + room.height - Floor::unit;
+			break;
+		}
+		sf::Vector2f doorPosition = Xyla::floor(sf::Vector2f(x, y), Floor::unit);
+		sf::Vector2i doorRePosition = Xyla::getRelativePosition(doorPosition, Floor::origin, Floor::unit);
+		if (Floor::gameMatrix[doorRePosition.y][doorRePosition.x] == CreatureType::Wall) {
+			Door door;
+			door.position = doorPosition;
+			door.roomid = room.id;
+			room.doors.push_back(door);
+			Floor::gameMatrix[doorRePosition.y][doorRePosition.x] = CreatureType::Door;
+			isCreated = true;
+		}
+		
+	}
+	
+}
 
-	sf::Vector2f out; // door position to get out
+
+// --------------------------- to create hallway --------------------------------------
+std::vector<sf::Vector2i>& Floor::getNeighbors(std::vector<std::vector<CreatureType>>& roomMatrix, std::vector<sf::Vector2i>& neighbors, sf::Vector2i vertex) {
+	if (vertex.x > 0) {
+		if (roomMatrix[vertex.y][vertex.x - 1] == CreatureType::Block || roomMatrix[vertex.y][vertex.x - 1] == CreatureType::Grass || roomMatrix[vertex.y][vertex.x - 1] == CreatureType::Door )
+			neighbors.push_back(sf::Vector2i(vertex.x - 1, vertex.y));
+	}
+	if (vertex.x < roomMatrix[0].size() - 1) {
+		if (roomMatrix[vertex.y][vertex.x + 1] == CreatureType::Block || roomMatrix[vertex.y][vertex.x + 1] == CreatureType::Grass || roomMatrix[vertex.y][vertex.x + 1] == CreatureType::Door)
+			neighbors.push_back(sf::Vector2i(vertex.x + 1, vertex.y));
+	}
+	if (vertex.y > 0) {
+		if (roomMatrix[vertex.y - 1][vertex.x] == CreatureType::Block || roomMatrix[vertex.y - 1][vertex.x] == CreatureType::Grass || roomMatrix[vertex.y - 1][vertex.x] == CreatureType::Door)
+			neighbors.push_back(sf::Vector2i(vertex.x, vertex.y - 1));
+	}
+	if (vertex.y < roomMatrix.size() - 1) {
+		if (roomMatrix[vertex.y + 1][vertex.x] == CreatureType::Block || roomMatrix[vertex.y + 1][vertex.x] == CreatureType::Grass || roomMatrix[vertex.y + 1][vertex.x] == CreatureType::Door)
+			neighbors.push_back(sf::Vector2i(vertex.x, vertex.y + 1));
+	}
+
+	return neighbors;
+}
+
+std::vector<sf::Vector2i> Floor::shortestPath(std::vector<std::vector<CreatureType>>& matrix, sf::Vector2i start, sf::Vector2i end) {
+
+	struct Parent {
+		sf::Vector2i vertex;
+		Parent* parent;
+		Parent(sf::Vector2i vertex, Parent* parent) {
+			this->vertex = vertex;
+			this->parent = parent;
+		}
+	};
+
+	std::vector<sf::Vector2i> neighbors;
+	std::queue<Parent*> Q;
+	std::vector<sf::Vector2i> visited;
+	std::vector<Parent*> parents;
+	bool isConnected = false;
+
+	visited.push_back(start);
+	Parent* p1 = new Parent(start, nullptr);
+	parents.push_back(p1);
+	Q.push(p1);
+	while (!Q.empty()) {
+		Parent* q = Q.front();
+		Floor::getNeighbors(matrix, neighbors, q->vertex);
+		Q.pop();
+		for (sf::Vector2i& v : neighbors) {
+			if (std::find(visited.begin(), visited.end(), v) == visited.end()) { //check if v is not in visited
+				visited.push_back(v);
+				Parent* p = new Parent(v, q);
+				parents.push_back(p);
+				if (v == end) {
+					isConnected = true;
+					goto end;
+				}
+				Q.push(p);
+			}
+		}
+		neighbors.clear();
+	}
+
+end:
+	std::vector<sf::Vector2i> shortestPath;
+	if (isConnected) {
+		Parent* p = parents.back();
+		while (p != p1) { //p1 is the start parent
+			shortestPath.push_back(p->vertex);
+			p = p->parent;
+			//std::cout << Xyla::print(nextMove) << " ";
+		}
+	}
+	
+	//std::cout << std::endl;
+
+	for (auto& p : parents) {
+		delete(p);
+	}
+
+	return shortestPath;
+
+}
+
+
+
+void Floor::createHallway(Room& room1, Room& room2) {
+	
+	std::vector<sf::Vector2i> reHallway;
+	bool isCreated = false; // havent created a hallway yet; 
+	
+	while (!isCreated) {
+		Floor::createDoor(room1);
+		Floor::createDoor(room2);
+		sf::Vector2i door1 = Xyla::getRelativePosition(room1.doors[room1.doors.size() - 1].position, Floor::origin, Floor::unit);
+		sf::Vector2i door2 = Xyla::getRelativePosition(room2.doors[room2.doors.size() - 1].position, Floor::origin, Floor::unit);
+		reHallway = Floor::shortestPath(Floor::gameMatrix, door1, door2);
+		if (reHallway.size() != 0)
+			isCreated = true;
+		else
+		{
+			Floor::gameMatrix[door1.y][door1.x] = CreatureType::Wall;
+			room1.doors.pop_back();
+			Floor::gameMatrix[door2.y][door2.x] = CreatureType::Wall;
+			room2.doors.pop_back();
+		}
+	}
+	
+	for (auto& step : reHallway) {
+		if (Floor::gameMatrix[step.y][step.x] == CreatureType::Block) {
+			Floor::gameMatrix[step.y][step.x] = CreatureType::Grass;
+			Floor::hallway.push_back(Xyla::getGeneralPosition(step, Floor::origin, Floor::unit));
+		}
+	}
+
+}
+
+void Floor::createHallways(std::vector<std::array<int, 2>>& edges) {
 	
 	for (auto& e : edges) {
 		int v1 = e[0], v2 = e[1];
-		float a1x = Floor::rooms.at(v1).position.x + Floor::unit, b1x = Floor::rooms.at(v1).position.x + Floor::rooms.at(v1).width - Floor::unit;
-		float a2x = Floor::rooms.at(v2).position.x + Floor::unit, b2x = Floor::rooms.at(v2).position.x + Floor::rooms.at(v2).width - Floor::unit;
+		Room& room1 = Floor::rooms.at(v1);
+		Room& room2 = Floor::rooms.at(v2);
+		//srand(time(0));
+		Floor::createHallway(room1, room2);	
+	}
+	
+}
 
-		float a1y = Floor::rooms.at(v1).position.y + Floor::unit, b1y = Floor::rooms.at(v1).position.y + Floor::rooms.at(v1).height - Floor::unit;
-		float a2y = Floor::rooms.at(v2).position.y + Floor::unit, b2y = Floor::rooms.at(v2).position.y + Floor::rooms.at(v2).height - Floor::unit;
 
-		srand(time(0));
-		if (a1x < b2x && a2x < b1x) { // if the two rooms intersect in x direction
-			rx = Xyla::getIntersectingIntervals(a1x, b1x, a2x, b2x); // get the interval of intersection
-			x = Xyla::floor(Xyla::rand((int)rx[0], (int)rx[1]) - Floor::unit, Floor::unit);
 
-			if (Floor::rooms.at(v1).position.y < Floor::rooms.at(v2).position.y) { // if v1 is above v2
-				y = Floor::rooms.at(v1).position.y + Floor::rooms.at(v1).height - Floor::unit;
-				width = 3 * Floor::unit;
-				height = Floor::rooms.at(v2).position.y - y + Floor::unit;
-				Room hallway;
-				hallway.id = Floor::heighestRoomId++;
-				Floor::createHallway(userMode, hallway, sf::Vector2f(x, y), width, height);
-
-				//create 2 doors
-				sf::Vector2f doorPos = Floor::rooms.at(hallway.id).position;
-				doorPos.x = doorPos.x + Floor::unit;
-				Floor::createConnectingDoor(doorPos, Floor::rooms.at(v1), Direction::up, Floor::rooms.at(hallway.id), Direction::down);
-				//create 2 doors
-				doorPos = Floor::rooms.at(hallway.id).position;
-				doorPos.y = doorPos.y + Floor::rooms.at(hallway.id).height - Floor::unit, doorPos.x = doorPos.x + Floor::unit;
-				Floor::createConnectingDoor(doorPos, Floor::rooms.at(hallway.id), Direction::up, Floor::rooms.at(v2), Direction::down);
+void Floor::scanForHallway(sf::Vector2i& rePosition) {
+	std::vector<sf::Vector2i> neighbors;
+	Floor::getNeighbors(Floor::gameMatrix, neighbors, rePosition);
+	for (auto& neighbor : neighbors) {
+		if (Floor::gameMatrix[neighbor.y][neighbor.x] == CreatureType::Grass || Floor::gameMatrix[neighbor.y][neighbor.x] == CreatureType::Door) {
+			sf::Vector2f position = Xyla::getGeneralPosition(neighbor, Floor::origin, Floor::unit);
+			if (std::find(visitedHallway.begin(), visitedHallway.end(), position) == visitedHallway.end()) {
+				Floor::visitedHallway.push_back(position);
 			}
-			else // if v2 is above v1
-			{
-				y = Floor::rooms.at(v2).position.y + Floor::rooms.at(v2).height - Floor::unit;
-				width = 3 * Floor::unit;
-				height = Floor::rooms.at(v1).position.y - y + Floor::unit;
-				Room hallway;
-				hallway.id = Floor::heighestRoomId++;
-				Floor::createHallway(userMode, hallway, sf::Vector2f(x, y), width, height);
-
-				//create 2 doors
-				sf::Vector2f doorPos = Floor::rooms.at(hallway.id).position;
-				doorPos.x = doorPos.x + Floor::unit;
-				Floor::createConnectingDoor(doorPos, Floor::rooms.at(v2), Direction::up, Floor::rooms.at(hallway.id), Direction::down);
-				//create 2 doors
-				doorPos = Floor::rooms.at(hallway.id).position;
-				doorPos.y = doorPos.y + Floor::rooms.at(hallway.id).height - Floor::unit, doorPos.x = doorPos.x + Floor::unit;
-				Floor::createConnectingDoor(doorPos, Floor::rooms.at(hallway.id), Direction::up, Floor::rooms.at(v1), Direction::down);
-			}
-		}
-		else if (a1y < b2y && a2y < b1y) {  // if the two rooms intersect in y direction
-			ry = Xyla::getIntersectingIntervals(a1y, b1y, a2y, b2y); // get the interval of intersection
-			y = Xyla::floor(Xyla::rand((int)ry[0], (int)ry[1]) - Floor::unit, Floor::unit);
-
-			if (Floor::rooms.at(v1).position.x < Floor::rooms.at(v2).position.x) { // if v1 is left v2
-				x = Floor::rooms.at(v1).position.x + Floor::rooms.at(v1).width - Floor::unit;
-				height = 3 * Floor::unit;
-				width = Floor::rooms.at(v2).position.x - x + Floor::unit;
-				Room hallway;
-				hallway.id = Floor::heighestRoomId++;
-				Floor::createHallway(userMode, hallway, sf::Vector2f(x, y), width, height);
-
-				//create 2 doors
-				sf::Vector2f doorPos = Floor::rooms.at(hallway.id).position;
-				doorPos.y = doorPos.y + Floor::unit;
-				Floor::createConnectingDoor(doorPos, Floor::rooms.at(v1), Direction::left, Floor::rooms.at(hallway.id), Direction::right);
-				//create 2 doors
-				doorPos = Floor::rooms.at(hallway.id).position;
-				doorPos.x = doorPos.x + Floor::rooms.at(hallway.id).width - Floor::unit, doorPos.y = doorPos.y + Floor::unit;
-				Floor::createConnectingDoor(doorPos, Floor::rooms.at(hallway.id), Direction::left, Floor::rooms.at(v2), Direction::right);
-			}
-			else // if v2 is above v1
-			{
-				x = Floor::rooms.at(v2).position.x + Floor::rooms.at(v2).width - Floor::unit;
-				height = 3 * Floor::unit;
-				width = Floor::rooms.at(v1).position.x - x + Floor::unit;
-				Room hallway;
-				hallway.id = Floor::heighestRoomId++;
-				Floor::createHallway(userMode, hallway, sf::Vector2f(x, y), width, height);
-
-				//create 2 doors
-				sf::Vector2f doorPos = Floor::rooms.at(hallway.id).position;
-				doorPos.y = doorPos.y + Floor::unit;
-				Floor::createConnectingDoor(doorPos, Floor::rooms.at(v2), Direction::left, Floor::rooms.at(hallway.id), Direction::right);
-				//create 2 doors
-				doorPos = Floor::rooms.at(hallway.id).position;
-				doorPos.x = doorPos.x + Floor::rooms.at(hallway.id).width - Floor::unit, doorPos.y = doorPos.y + Floor::unit;
-				Floor::createConnectingDoor(doorPos, Floor::rooms.at(hallway.id), Direction::left, Floor::rooms.at(v1), Direction::right);
-			}
-			
-		}
-		else { //create an L shaped hallway
-			if (Floor::rooms.at(v1).position.x < Floor::rooms.at(v2).position.x) {
-				if (Floor::rooms.at(v1).position.y < Floor::rooms.at(v2).position.y) {
-					x = Xyla::floor(Xyla::rand(Floor::rooms.at(v1).position.x, Floor::rooms.at(v1).position.x + Floor::rooms.at(v1).width - 3 * Floor::unit), Floor::unit);
-					y = Floor::rooms.at(v1).position.y + Floor::rooms.at(v1).height - Floor::unit;	
-					width = 3 * Floor::unit;
-					float y2 = Xyla::floor(Xyla::rand(Floor::rooms.at(v2).position.y + 3 * Floor::unit, Floor::rooms.at(v2).position.y + Floor::rooms.at(v2).height), Floor::unit);
-					height = y2 - y;
-					Room hallway;
-					hallway.id = Floor::heighestRoomId++;
-					Floor::createHallway(userMode, hallway, sf::Vector2f(x, y), width, height);
-
-					y = y2 - 3 * Floor::unit;
-					x = x + 2 * Floor::unit;
-					height = 3 * Floor::unit;
-					width = Floor::rooms.at(v2).position.x + Floor::unit - x;
-					Room hallway2;
-					hallway2.id = Floor::heighestRoomId++;
-					Floor::createHallway(userMode, hallway2, sf::Vector2f(x, y), width, height);
-
-					//create 2 doors to connect v1 to hallway
-					sf::Vector2f doorPos = Floor::rooms.at(hallway.id).position;
-					doorPos.x = doorPos.x + Floor::unit;
-					Floor::createConnectingDoor(doorPos, Floor::rooms.at(v1), Direction::up, Floor::rooms.at(hallway.id), Direction::down);
-					//create 2 doors to connect halway1 to hallway2
-					doorPos = Floor::rooms.at(hallway2.id).position;
-					doorPos.y = doorPos.y + Floor::unit;
-					Floor::createConnectingDoor(doorPos, Floor::rooms.at(hallway.id), Direction::left, Floor::rooms.at(hallway2.id), Direction::right);
-					//create 2 doors to connect halway2 to v2
-					doorPos = Floor::rooms.at(hallway2.id).position;
-					doorPos.x = doorPos.x + Floor::rooms.at(hallway2.id).width - Floor::unit, doorPos.y = doorPos.y + Floor::unit;
-					Floor::createConnectingDoor(doorPos, Floor::rooms.at(hallway2.id), Direction::left, Floor::rooms.at(v2), Direction::right);
-
-
-				}
-				else {
-					x = Xyla::floor(Xyla::rand(Floor::rooms.at(v1).position.x, Floor::rooms.at(v1).position.x + Floor::rooms.at(v1).width - 3 * Floor::unit), Floor::unit);
-					y = Xyla::floor(Xyla::rand(Floor::rooms.at(v2).position.y, Floor::rooms.at(v2).position.y + Floor::rooms.at(v2).width - 3 * Floor::unit), Floor::unit);
-					width = 3 * Floor::unit;
-					height = Floor::rooms.at(v1).position.y + Floor::unit - y;
-					Room hallway;
-					hallway.id = Floor::heighestRoomId++;
-					Floor::createHallway(userMode, hallway, sf::Vector2f(x, y), width, height);
-
-					x = x + 2 * Floor::unit;
-					y = y;
-					height = 3 * Floor::unit;
-					float x2 = Floor::rooms.at(v2).position.x + Floor::unit;
-					width = x2 - x;
-					Room hallway2;
-					hallway2.id = Floor::heighestRoomId++;
-					Floor::createHallway(userMode, hallway2, sf::Vector2f(x, y), width, height);
-
-					//create 2 doors to connect v1 to hallway
-					sf::Vector2f doorPos = Floor::rooms.at(hallway.id).position;
-					doorPos.x = doorPos.x + Floor::unit, doorPos.y = doorPos.y + Floor::rooms.at(hallway.id).height - Floor::unit;
-					Floor::createConnectingDoor(doorPos, Floor::rooms.at(v1), Direction::down, Floor::rooms.at(hallway.id), Direction::up);
-					//create 2 doors to connect halway1 to hallway2
-					doorPos = Floor::rooms.at(hallway2.id).position;
-					doorPos.y = doorPos.y + Floor::unit;
-					Floor::createConnectingDoor(doorPos, Floor::rooms.at(hallway.id), Direction::left, Floor::rooms.at(hallway2.id), Direction::right);
-					//create 2 doors to connect halway2 to v2
-					doorPos = Floor::rooms.at(hallway2.id).position;
-					doorPos.x = doorPos.x + Floor::rooms.at(hallway2.id).width - Floor::unit, doorPos.y = doorPos.y + Floor::unit;
-					Floor::createConnectingDoor(doorPos, Floor::rooms.at(hallway2.id), Direction::left, Floor::rooms.at(v2), Direction::right);
-				}
-
-
-			}
-
-			else if (Floor::rooms.at(v2).position.x < Floor::rooms.at(v1).position.x) {
-				if (Floor::rooms.at(v2).position.y < Floor::rooms.at(v1).position.y) {
-					x = Xyla::floor(Xyla::rand(Floor::rooms.at(v2).position.x, Floor::rooms.at(v2).position.x + Floor::rooms.at(v2).width - 3 * Floor::unit), Floor::unit);
-					y = Xyla::floor(Floor::rooms.at(v2).position.y + Floor::rooms.at(v2).height - Floor::unit, Floor::unit);
-					width = 3 * Floor::unit;
-					float y2 = Xyla::floor(Xyla::rand(Floor::rooms.at(v1).position.y + 3 * Floor::unit, Floor::rooms.at(v1).position.y + Floor::rooms.at(v1).height), Floor::unit);
-					height = y2 - y;
-					Room hallway;
-					hallway.id = Floor::heighestRoomId++;
-					Floor::createHallway(userMode, hallway, sf::Vector2f(x, y), width, height);
-
-					y = y2 - 3 * Floor::unit;
-					x = x + 2 * Floor::unit;
-					height = 3 * Floor::unit;
-					width = Floor::rooms.at(v1).position.x + Floor::unit - x;
-					Room hallway2;
-					hallway2.id = Floor::heighestRoomId++;
-					Floor::createHallway(userMode, hallway2, sf::Vector2f(x, y), width, height);
-
-					//create 2 doors to connect v2 to hallway
-					sf::Vector2f doorPos = Floor::rooms.at(hallway.id).position;
-					doorPos.x = doorPos.x + Floor::unit;
-					Floor::createConnectingDoor(doorPos, Floor::rooms.at(v2), Direction::up, Floor::rooms.at(hallway.id), Direction::down);
-					//create 2 doors to connect halway1 to hallway2
-					doorPos = Floor::rooms.at(hallway2.id).position;
-					doorPos.y = doorPos.y + Floor::unit;
-					Floor::createConnectingDoor(doorPos, Floor::rooms.at(hallway.id), Direction::left, Floor::rooms.at(hallway2.id), Direction::right);
-					//create 2 doors to connect halway2 to v1
-					doorPos = Floor::rooms.at(hallway2.id).position;
-					doorPos.x = doorPos.x + Floor::rooms.at(hallway2.id).width - Floor::unit, doorPos.y = doorPos.y + Floor::unit;
-					Floor::createConnectingDoor(doorPos, Floor::rooms.at(hallway2.id), Direction::left, Floor::rooms.at(v1), Direction::right);
-
-				}
-				else {
-					x = Xyla::floor(Xyla::rand(Floor::rooms.at(v2).position.x, Floor::rooms.at(v2).position.x + Floor::rooms.at(v2).width - 3 * Floor::unit), Floor::unit);
-					y = Xyla::floor(Xyla::rand(Floor::rooms.at(v1).position.y, Floor::rooms.at(v1).position.y + Floor::rooms.at(v1).width - 3 * Floor::unit), Floor::unit);
-					width = 3 * Floor::unit;
-					height = Floor::rooms.at(v2).position.y + Floor::unit - y;
-					Room hallway;
-					hallway.id = Floor::heighestRoomId++;
-					Floor::createHallway(userMode, hallway, sf::Vector2f(x, y), width, height);
-
-					x = x + 2 * Floor::unit;
-					y = y;
-					height = 3 * Floor::unit;
-					float x2 = Floor::rooms.at(v1).position.x + Floor::unit;
-					width = x2 - x;
-					Room hallway2;
-					hallway2.id = Floor::heighestRoomId++;
-					Floor::createHallway(userMode, hallway2, sf::Vector2f(x, y), width, height);
-
-					//create 2 doors to connect v2 to hallway
-					sf::Vector2f doorPos = Floor::rooms.at(hallway.id).position;
-					doorPos.x = doorPos.x + Floor::unit, doorPos.y = doorPos.y + Floor::rooms.at(hallway.id).height - Floor::unit;
-					Floor::createConnectingDoor(doorPos, Floor::rooms.at(v2), Direction::down, Floor::rooms.at(hallway.id), Direction::up);
-					//create 2 doors to connect halway1 to hallway2
-					doorPos = Floor::rooms.at(hallway2.id).position;
-					doorPos.y = doorPos.y + Floor::unit;
-					Floor::createConnectingDoor(doorPos, Floor::rooms.at(hallway.id), Direction::left, Floor::rooms.at(hallway2.id), Direction::right);
-					//create 2 doors to connect halway2 to v1
-					doorPos = Floor::rooms.at(hallway2.id).position;
-					doorPos.x = doorPos.x + Floor::rooms.at(hallway2.id).width - Floor::unit, doorPos.y = doorPos.y + Floor::unit;
-					Floor::createConnectingDoor(doorPos, Floor::rooms.at(hallway2.id), Direction::left, Floor::rooms.at(v1), Direction::right);
-				}
-			}
-
 		}
 	}
 }
-
 
 
 #ifdef XYLA_DEBUG
@@ -961,22 +917,98 @@ void Floor::printEdges(std::vector<std::array<int, 2>>& edges) {
 
 #endif // XYLA_DEBUG
 
+void Floor::createGold(Room& room) {
+	if (room.isInhabitable()) {
+		std::srand(time(0) + (int)CreatureType::Gold);
+		int b = (((int)room.width) / Floor::unit + ((int)room.height) / Floor::unit) / 10;
+		int goldNumber = (int)Xyla::rand(0, b);
+
+		std::srand(time(0) + 11);
+		for (int i = 0; i <= goldNumber; ++i) {
+			Gold gold;
+			gold.initiatePosition(room.position, room.size, room.unit);
+			sf::Vector2i goldPosition = Xyla::getRelativePosition(gold.position, Floor::origin, Floor::unit);
+			room.golds.push_back(gold);
+			Floor::gameMatrix[goldPosition.y][goldPosition.x] = CreatureType::Gold;
+		}
+	}
+}
 
 void Floor::createGolds() {
 	for (auto& room : Floor::rooms) {
-		room.second.createGold();
+		Floor::createGold(room.second);
+	}
+}
+
+
+void Floor::createEnemies(Room& room) {
+	if (room.isInhabitable()) {
+		std::srand(time(0) + (int)CreatureType::Enemy);
+		int b = (((int)room.width) / Floor::unit + ((int)room.height) / Floor::unit) / 15;
+		int enemyNumber = (int)Xyla::rand(0, b);
+		for (int i = 0; i <= enemyNumber; ++i) {
+			Enemy enemy;
+			enemy.initiatePosition(room.position, room.size, Floor::unit);
+			sf::Vector2i enemyPosition = Xyla::getRelativePosition(enemy.position, Floor::origin, Floor::unit);
+
+			if (Floor::gameMatrix[enemyPosition.y][enemyPosition.x] == CreatureType::Sand) {
+				room.enemies.push_back(enemy);
+				Floor::gameMatrix[enemyPosition.y][enemyPosition.x] = CreatureType::Enemy;
+			}
+			else {
+				//--i;
+			}
+		}
 	}
 }
 
 void Floor::createEnemies() {
 	for (auto& room : Floor::rooms) {
-		room.second.createEnemies();
+		Floor::createEnemies(room.second);
 	}
 }
 
 
-void Floor::createDoors() {
-	for (auto& room : Floor::rooms) {
-		room.second.createDoors();
+
+void Floor::moveEnemy(Player& player, Room& room) {
+	for (std::list<Enemy>::iterator it = room.enemies.begin(); it != room.enemies.end(); ++it) {
+		//std::cout << "enemy rp = " << Xyla::print(Xyla::getRelativePosition(it->position, Room::position, Room::unit)) << std::endl;
+		//std::cout << "player rp = " << Xyla::print(Xyla::getRelativePosition(player.position, Room::position, Room::unit)) << std::endl;
+		sf::Vector2i nextMove = it->nextMove(Floor::gameMatrix, Xyla::getRelativePosition(it->position, Floor::origin, Floor::unit),
+			Xyla::getRelativePosition(player.position, Floor::origin, Floor::unit));
+		//std::cout << "next move = " << Xyla::print(nextMove) << std::endl;
+		if (gameMatrix[nextMove.y][nextMove.x] != CreatureType::Player) {
+			if (gameMatrix[nextMove.y][nextMove.x] == CreatureType::Sand) {
+				sf::Vector2i rePosition = Xyla::getRelativePosition(it->position, Floor::origin, Floor::unit);
+				gameMatrix[rePosition.y][rePosition.x] = CreatureType::Sand;
+				it->position = Xyla::getGeneralPosition(nextMove, Floor::origin, Floor::unit, 5);
+				gameMatrix[nextMove.y][nextMove.x] = CreatureType::Enemy;
+			}
+		}
+		else {
+			if (--player.health == 0) {
+				player.isAlive = false;
+				break;
+			}
+		}
+
 	}
+
 }
+
+
+void Floor::createStair() {
+	std::srand(time(0) + (int)CreatureType::Stair);
+	float a = Xyla::rand(0, Floor::livingRooms.size() - 1); // room to create stair in
+	int roomid= Floor::livingRooms[(int)a]; // get the room id
+	Room& room = Floor::rooms.at(roomid);
+
+	float px = Xyla::rand((int)(room.position.x + Floor::unit), (int)(room.position.x + room.size.x - Floor::unit - 1));
+	float py = Xyla::rand((int)(room.position.y + Floor::unit), (int)(room.position.y + room.size.y - Floor::unit - 1));
+
+	room.stair.position = Xyla::floor(sf::Vector2f(px, py), (int)Floor::unit, Floor::origin, 5);
+
+	sf::Vector2i stairRePosition = Xyla::getRelativePosition(room.stair.position, Floor::origin, Floor::unit);
+	Floor::gameMatrix[stairRePosition.y][stairRePosition.x] = CreatureType::Stair;
+}
+

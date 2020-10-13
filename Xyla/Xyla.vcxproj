@@ -95,6 +95,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\gameCT.h" />
     <ClInclude Include="src\Xyla.h" />
     <ClInclude Include="src\creature.h" />
     <ClInclude Include="src\entity.h" />
@@ -114,6 +115,7 @@
     <ClCompile Include="src\floor.cpp" />
     <ClCompile Include="src\floorCT.cpp" />
     <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\gameCT.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mathematics.cpp" />
     <ClCompile Include="src\player.cpp" />

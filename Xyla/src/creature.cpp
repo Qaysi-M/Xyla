@@ -15,19 +15,19 @@ void Creature::initiatePosition(sf::Vector2f& rPosition, sf::Vector2f& rSize, fl
 
 std::vector<sf::Vector2i>& Creature::getNeighbors(std::vector<std::vector<CreatureType>>& roomMatrix, std::vector<sf::Vector2i>& neighbors, sf::Vector2i vertex) {
 	if (vertex.x > 0) {
-		if (roomMatrix[vertex.y][vertex.x - 1] == CreatureType::None || roomMatrix[vertex.y][vertex.x - 1] == CreatureType::Player)
+		if (roomMatrix[vertex.y][vertex.x - 1] == CreatureType::Sand || roomMatrix[vertex.y][vertex.x - 1] == CreatureType::Player)
 			neighbors.push_back(sf::Vector2i(vertex.x - 1, vertex.y));
 	}
 	if (vertex.x < roomMatrix[0].size() - 1) {
-		if(roomMatrix[vertex.y][vertex.x + 1] == CreatureType::None || roomMatrix[vertex.y][vertex.x + 1] == CreatureType::Player)
+		if(roomMatrix[vertex.y][vertex.x + 1] == CreatureType::Sand || roomMatrix[vertex.y][vertex.x + 1] == CreatureType::Player)
 			neighbors.push_back(sf::Vector2i(vertex.x + 1, vertex.y));
 	}
 	if (vertex.y > 0) {
-		if (roomMatrix[vertex.y - 1][vertex.x] == CreatureType::None || roomMatrix[vertex.y - 1][vertex.x] == CreatureType::Player)
+		if (roomMatrix[vertex.y - 1][vertex.x] == CreatureType::Sand || roomMatrix[vertex.y - 1][vertex.x] == CreatureType::Player)
 			neighbors.push_back(sf::Vector2i(vertex.x, vertex.y - 1));
 	}
 	if (vertex.y < roomMatrix.size() - 1) {
-		if (roomMatrix[vertex.y + 1][vertex.x] == CreatureType::None || roomMatrix[vertex.y + 1][vertex.x] == CreatureType::Player)
+		if (roomMatrix[vertex.y + 1][vertex.x] == CreatureType::Sand || roomMatrix[vertex.y + 1][vertex.x] == CreatureType::Player)
 			neighbors.push_back(sf::Vector2i(vertex.x, vertex.y + 1));
 	}
 	
@@ -78,9 +78,9 @@ end:
 	while ( p != p1){ //p1 is the start parent
 		nextMove = p->vertex;
 		p = p->parent;
-		std::cout << Xyla::print(nextMove) << " ";
+		//std::cout << Xyla::print(nextMove) << " ";
 	}
-	std::cout << std::endl;
+	//std::cout << std::endl;
 
 	for (auto& p : parents) {
 		delete(p);
