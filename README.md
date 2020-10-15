@@ -8,5 +8,5 @@ To play the game, download the project by pressing the green button “code” a
 If an error occurred and the message states that a dynamic library file missing ( a file that ends with .dll ie. “filename.dll”), then you need the Visual C++ run time library. You could download the Visual C++ redistributable from [here]( https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) .
 
 ## Acknowledgment 
-* Read morea about the original Rouge [here](https://en.wikipedia.org/wiki/Rogue_(video_game))
+* Read more about the original Rouge from [here](https://en.wikipedia.org/wiki/Rogue_(video_game))
 * Learn about the Delaunay algorithm that is used in the project from [here](http://www.personal.psu.edu/cxc11/AERSP560/DELAUNEY/13_Two_algorithms_Delauney.pdf)
