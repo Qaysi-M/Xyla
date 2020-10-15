@@ -5,7 +5,7 @@ Xyla is an implementation of the original Rouge game. To develop that, I have im
 
 ## installation
 To play the game, download the project by pressing the green button “code” and then “Download Zip”. After extracting the project, go to Xyla/output/Debug-windows-x86_64/Xyla/ and then run Xyla.exe. 
-If an error occurred and the message states that dynamic library file missing ( a file that ends with .dll ie. “filename.dll”), then you need the Visual C++ run time library. You could download the Visual C++ redistributable from [here]( https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) .
+If an error occurred and the message states that a dynamic library file missing ( a file that ends with .dll ie. “filename.dll”), then you need the Visual C++ run time library. You could download the Visual C++ redistributable from [here]( https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) .
 
 ## Acknowledgment 
 * Read morea about the original Rouge [here](https://en.wikipedia.org/wiki/Rogue_(video_game))
