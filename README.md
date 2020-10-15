@@ -12,4 +12,4 @@ You can play the game by using your keyboard. You can move the player through us
 
 ## Acknowledgment 
 * Read more about the original Rouge from [here](https://en.wikipedia.org/wiki/Rogue_(video_game))
-* Learn about the Delaunay algorithm that is used in the project from [here](http://www.personal.psu.edu/cxc11/AERSP560/DELAUNEY/13_Two_algorithms_Delauney.pdf)
+* Learn about the Delaunay algorithm used in the project from [here](http://www.personal.psu.edu/cxc11/AERSP560/DELAUNEY/13_Two_algorithms_Delauney.pdf)
