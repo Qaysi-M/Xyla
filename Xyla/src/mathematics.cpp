@@ -96,3 +96,4 @@ std::vector<float> Xyla::getIntersectingIntervals(float a1, float b1, float a2, 
 	return std::vector<float> {a, a + b};
 
 }
+

@@ -30,6 +30,11 @@ namespace Xyla {
 	//This is oppoistie of getRelativePosition
 	sf::Vector2f getGeneralPosition(sf::Vector2i& a, sf::Vector2f& b, float u, float indentation = 0);
 
+	template<typename T>
+	void output(T out) {
+		std::cout << out << std::endl;
+	}
+	
 	char print(sf::Vector2f v);
 	char print(sf::Vector2i v);
 

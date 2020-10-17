@@ -95,13 +95,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\gameCT.h" />
     <ClInclude Include="src\Xyla.h" />
     <ClInclude Include="src\creature.h" />
     <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\floor.h" />
     <ClInclude Include="src\floorCT.h" />
     <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\gameCT.h" />
     <ClInclude Include="src\mathematics.h" />
     <ClInclude Include="src\player.h" />
     <ClInclude Include="src\playerCT.h" />

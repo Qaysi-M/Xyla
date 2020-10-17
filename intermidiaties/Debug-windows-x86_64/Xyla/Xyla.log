@@ -85,9 +85,9 @@ C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(213,58): warni
 C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(234,14): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(293,18): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(356,14): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(544,38): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(544,2): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(552,25): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(669,37): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(669,2): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(694,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\floor.cpp(717,80): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
           with
@@ -147,6 +147,11 @@ C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\game.cpp(46,8): warning 
 C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\gameCT.cpp(22,6): warning C4996: 'sf::Text::setColor': was declared deprecated
   main.cpp
 C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\main.cpp(26,12): warning C4244: 'initializing': conversion from 'time_t' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\main.cpp(27,13): warning C4244: 'initializing': conversion from 'time_t' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\main.cpp(29,8): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\main.cpp(30,8): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\main.cpp(49,17): warning C4244: '=': conversion from 'time_t' to 'int', possible loss of data
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\main.cpp(54,18): warning C4244: '=': conversion from 'time_t' to 'int', possible loss of data
   mathematics.cpp
   player.cpp
 C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\player.cpp(11,17): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
@@ -161,8 +166,9 @@ C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\player.cpp(89,14): warni
               T=float
           ]
   playerCT.cpp
-C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\playerCT.cpp(27,11): warning C4996: 'sf::Text::setColor': was declared deprecated
-C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\playerCT.cpp(42,13): warning C4996: 'sf::Text::setColor': was declared deprecated
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\playerCT.cpp(29,11): warning C4996: 'sf::Text::setColor': was declared deprecated
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\playerCT.cpp(44,13): warning C4996: 'sf::Text::setColor': was declared deprecated
+C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\playerCT.cpp(90,7): warning C4996: 'sf::Text::setColor': was declared deprecated
   room.cpp
 C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\room.cpp(42,38): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\Qaysi\ProgramProjects\VSProjects\Xyla\Xyla\src\room.cpp(43,40): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data

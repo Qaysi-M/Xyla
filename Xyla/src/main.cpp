@@ -29,6 +29,7 @@ int main() {
 	int i = 0.1;
 	int j = 0.5;
 	while (windowView.isOpen()) {
+		Xyla::output(5);
 		if (game->player.isAlive) {
 			Floor& floor = game->floors.at(game->currentFloor);
 			Room& room = floor.rooms.at(game->currentRoom);

@@ -310,7 +310,6 @@ std::vector<int> Floor::constructConvexHull(std::vector<int> v) {
 					q = i;
 			}
 
-
 			p = q;
 		} while (p != 0);
 
