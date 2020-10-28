@@ -4,7 +4,7 @@ Xyla is a rouge-like game. A rouge like game is a game in which death is imminen
 Xyla is an implementation of the original Rouge game. To develop that, I have implemented multiple graph algorithms. I used efficient path-finding algorithms for enemy chase. To create dungeons and to make rooms that are neither strongly nor weakly connected, I used a combination of minimum spanning tree and Delaunay triangulation. The Delaunay algorithm used in the project is _asymptotically optimal_. 
 
 ## Installation
-To play the game, download the project by pressing the green button “code” and then “Download Zip”. After extracting the project, go to Xyla/output/Release-windows-x86_64/Xyla/ and then run Xyla.exe. Please note that Xyla is a windows x64 program.
+To play the game, download it from [here] (https://onedrive.live.com/?authkey=%21AIfzyGqVULYToWc&id=B4BC6A96FDF1784F%218263&cid=B4BC6A96FDF1784F).
 If an error occurred and the message states that a dynamic library file missing ( a file that ends with .dll ie. “filename.dll”), then you need the Visual C++ run time library. You could download the Visual C++ redistributable from [here]( https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) .
 
 ## Play
